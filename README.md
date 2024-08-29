@@ -69,7 +69,7 @@ npm run start
 
 修改页面【右下角 -> 高级模式 -> custom_api的参数值 】
 
-1. 如何获取`x-ti-app-id`, `x-ti-secret-code`
+2. 如何获取`x-ti-app-id`, `x-ti-secret-code`
 
 请至 [Textin.com](https://textin.com) 免费注册账号后，在【工作台 - 账号管理 - 开发者信息】中查看
 
