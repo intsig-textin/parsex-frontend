@@ -34,25 +34,40 @@
 
 ## 安装依赖
 
+环境要求：
+
+1. node 版本 >= 18.20.4
+2. 强烈建议使用 `yarn` 包管理器，项目仓库包含 `yarn.lock`，指定了依赖版本
+
+拉取项目
+
+```bash
+git clone https://github.com/intsig-textin/parsex-frontend.git
+```
+
 使用 npm 或 yarn 安装：
 
 ```bash
-npm install
-# 或
 yarn install
+# 或
+npm install
 ```
 
 ## 启动项目
 
 ```bash
-npm run start
-# 或
 yarn start
+# 或
+npm run start
 ```
 
 浏览器访问 <http://localhost:10007>
 
 ## QA
+
+1. 自定义API接口
+
+修改页面【右下角 -> 高级模式 -> custom_api的参数值 】
 
 1. 如何获取`x-ti-app-id`, `x-ti-secret-code`
 
@@ -98,6 +113,4 @@ yarn start
 
 ## 许可证
 
-此项目基于 [MIT License](LICENSE) 进行许可。
-
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+此项目基于 [CC-NC License](LICENSE) 进行许可。
