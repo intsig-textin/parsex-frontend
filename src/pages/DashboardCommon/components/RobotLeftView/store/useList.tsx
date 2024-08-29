@@ -12,6 +12,7 @@ import { generateUUID, messageByCode, notSupportPreView } from '@/utils';
 import { setResultCache } from '../utils/cacheResult';
 import type { ConnectState } from '@/models/connect';
 import { AppIdAndSecretPosition } from '../../ParamsSettings';
+import { getParamsSettings } from '../../ParamsSettings/utils';
 
 interface IResult {
   list: IFileItem[];
@@ -43,15 +44,28 @@ const useList = () => {
         // 兼容格式
         if (!res.data?.id) {
           const data = res.data;
+
+          // 兼容角度
+          if (!data.metrics) {
+            const curSettings = getParamsSettings();
+            data.dpi = curSettings.dpi || '144';
+            data.metrics = data.pages.map((o, i) => ({
+              page_id: i + 1,
+              angle: o.angle || 0,
+            }));
+          }
+
           res.data = {
             id: generateUUID(),
-            countStatus: data.count_status,
-            status: data.ocr_status === 1 ? 'complete' : 'wait',
-            imageData: params.imgData,
+            count_status: 1,
+            ocr_status: 1,
+            cloud_ocr: 0,
+            ctime: Date.now().valueOf().toString().slice(0, 10),
+            utime: Date.now().valueOf().toString().slice(0, 10),
+            status: null,
             img_name: params.imgName,
             img_uri: params.url,
-            cloudStatus: 0,
-            dpi: data?.dpi || 72,
+            thumbnail: params.url,
             result: data,
           };
         }

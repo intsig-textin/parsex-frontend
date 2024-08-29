@@ -249,7 +249,7 @@ export async function robotRecognize({
     param.support_doc_parser = 1;
   }
 
-  const requestUrl = '/robot/ocr_recognize';
+  const requestUrl = param.custom_api ? param.custom_api : '/robot/ocr_recognize';
 
   return request<IRecognizeRes>(paramToString(param, requestUrl), {
     ...bodyOption,

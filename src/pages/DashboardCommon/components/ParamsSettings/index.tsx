@@ -31,15 +31,21 @@ export const AppIdAndSecretDesc = `请至 ${textinDomain} 免费注册账号后�
 
 const AppIdAndSecretOptions = [
   {
+    desc: `自定义API接口地址`,
+    key: 'custom_api',
+    require: false,
+    type: 'string',
+  },
+  {
     desc: AppIdAndSecretDesc,
     key: 'x-ti-app-id',
-    require: true,
+    require: false,
     type: 'string',
   },
   {
     desc: AppIdAndSecretDesc,
     key: 'x-ti-secret-code',
-    require: true,
+    require: false,
     type: 'string',
   },
 ];

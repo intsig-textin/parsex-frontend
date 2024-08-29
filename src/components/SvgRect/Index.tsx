@@ -150,7 +150,7 @@ export default ({
           rate={rate}
           activeId={activeId}
           onClick={handleClick}
-          key={item.uid || item.key}
+          key={item.uid || item.key || String(idx)}
           renderText={(points) => showText && <RectText points={points} num={idx + 1} />}
         />
       ))}

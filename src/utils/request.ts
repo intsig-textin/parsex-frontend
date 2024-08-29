@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import type { ResponseError } from 'umi-request';
 import umiRequest, { extend } from 'umi-request';
-import { isWhiteList } from './common';
 import { notification } from 'antd';
 import { ObjectKeyToLine } from './paramParse';
 import { env, getEnv } from './env';
@@ -72,7 +71,7 @@ const errorHandler = async (error: ResponseError<any>): Promise<Response> => {
 export const envUrl = {
   // [env.TEST]: 'https://textin-sandbox.intsig.com',
   [env.TEST]: 'https://api.textin.com',
-  [env.PRODUCTION]: 'https://web-api.textin.com',
+  [env.PRODUCTION]: 'https://api.textin.com',
 };
 
 export const ocrUrl = {
@@ -106,6 +105,10 @@ request.interceptors.request.use((url, options: any) => {
     Object.assign(options, {
       data: params,
     });
+  }
+
+  if (options.url.startsWith('http://') || options.url.startsWith('https://')) {
+    url = options.url;
   }
 
   return {

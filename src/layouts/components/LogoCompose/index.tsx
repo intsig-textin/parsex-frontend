@@ -12,7 +12,7 @@ const LogoCompose: FC<LogoComposeProps> = ({ onClick }) => {
       <img src={logoTextBlack} height={30} width={82} />
       <div className={styles.logoLine} />
       {/* <img src={localname} height={30} width={60} /> */}
-      <span className={styles.productName}>智能文字识别产品</span>
+      <span className={styles.productName}>ParseX</span>
     </div>
   );
 };

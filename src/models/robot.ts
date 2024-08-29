@@ -88,7 +88,7 @@ const pdf2mdResData = {
     name: '通用文档解析',
     scene: -1,
     image:
-      'https://textin-sandbox.intsig.com/open/image/download?filename=9414bf70408b4af99cbc2e5512ef068d、https://textin-sandbox.intsig.com/open/image/download?filename=ce729cfc57ad40e8911b5e060f134a4f.pdf、https://textin-sandbox.intsig.com/open/image/download?filename=fdd03cb2705d465caaa1802a78588806.pdf',
+      'https://web-api.textin.com/open/image/download?filename=9414bf70408b4af99cbc2e5512ef068d、https://web-api.textin.com/open/image/download?filename=ce729cfc57ad40e8911b5e060f134a4f.pdf、https://web-api.textin.com/open/image/download?filename=fdd03cb2705d465caaa1802a78588806.pdf',
     ctime: '2024-03-22 15:00:16',
     type: -1,
     special_describe: '',
