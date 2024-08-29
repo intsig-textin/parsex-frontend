@@ -14,19 +14,23 @@
 ## 项目简介
 
 在解析结果审核校对、效果测评等场景，需要可视化展示文档解析后的结果。
-在 Textln.com 体验页上，我们提供丰富的可视化和交互功能，现已开源，仓库地址：<https://github.com/intsig/>
 
-目前前端组件已实现以下特性
-1.预览渲染主流图片格式和pdf文件，提供缩放和旋转功能
-2. markdown结果渲染，支持各级标题、图片、公式渲染展示
-3. 各类解析元素提取展示，支持查看表格、公式、图片，和原始JSON 结果
-4.解析元素文档位置溯源，原文画框标注各元素位置，可以点击画框跳转解析结果，也可以点击解析结果跳转原文画框
-5. 各级目录树还原展示，支持点击跳转相应章节
-6.接口调用选项参数配置，支持配置不同参数组合，获取相应解析结果
-7. 复制和导出markdown文件
-8. 复制解析后的表格和图片，可以直接粘贴到Excel表格中
-9.
-以上功能，都可以在 Textln.com 上体验使用，地址：<https://www.textin.com/console/recognition/robot_markdown?service=paf_to_markdown>
+在 [TextIn.com](https://textin.com) 体验页上，我们提供丰富的可视化和交互功能，这部分前端组件现已开源！
+
+项目用ES6开发，基于React框架。[仓库地址](https://github.com/intsig/parse-genius-frontend)
+
+目前前端组件已实现以下特性：
+
+1. **预览渲染主流图片格式和pdf文件**，提供缩放和旋转功能
+2. **markdown结果渲染**，支持各级标题、图片、公式渲染展示
+3. **各类解析元素提取展示**，支持查看表格、公式、图片，和原始 JSON 结果
+4. **解析元素文档位置溯源**，原文画框标注各元素位置，可以点击画框跳转解析结果，也可以点击解析结果跳转原文画框
+5. **各级目录树还原展示**，支持点击跳转相应章节
+6. **接口调用选项参数配置**，支持配置不同参数组合，获取相应解析结果
+7. **复制和导出markdown文件**
+8. **复制解析后的表格和图片**，可以直接粘贴到Excel表格中
+
+以上功能，都可以在 [TextIn.com](https://textin.com) 上体验使用，[👉 体验地址](https://www.textin.com/console/recognition/robot_markdown?service=pdf_to_markdownm)
 
 ## 安装依赖
 
@@ -52,7 +56,7 @@ yarn start
 
 1. 如何获取`x-ti-app-id`, `x-ti-secret-code`
 
-请至 <https://textin.com> 免费注册账号后，在【工作台 - 账号管理 - 开发者信息】中查看
+请至 [Textin.com](https://textin.com) 免费注册账号后，在【工作台 - 账号管理 - 开发者信息】中查看
 
 ## 脚本命令
 
