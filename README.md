@@ -17,7 +17,7 @@
 
 在 [TextIn.com](https://textin.com) 体验页上，我们提供丰富的可视化和交互功能，这部分前端组件现已开源！
 
-项目用ES6开发，基于React框架。[仓库地址](https://github.com/intsig/parse-genius-frontend)
+项目用ES6开发，基于React框架。
 
 目前前端组件已实现以下特性：
 
