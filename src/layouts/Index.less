@@ -1,0 +1,60 @@
+@color-white: #ffffff;
+@color-red: #e60011;
+@maxWidth: '1440px';
+@navHeight: 50px;
+
+.desktopContainer {
+  :global(.ant-layout) {
+    background-color: #f7f7f7 !important;
+
+    main {
+      width: 100%;
+      padding-top: 65px;
+    }
+  }
+}
+
+.main {
+  margin: auto;
+}
+
+.textinLoginHeaderWrapper {
+  position: absolute;
+  right: 0;
+  left: 0;
+  z-index: 10;
+  color: #4877ff;
+  font-size: 16px;
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    padding: 0 60px;
+
+    .logo {
+      img {
+        height: 34px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .loginPageContainer {
+    width: 1280px;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .footer {
+    width: 1280px;
+  }
+
+  .loginContainer {
+    .footer {
+      width: 100%;
+    }
+  }
+}

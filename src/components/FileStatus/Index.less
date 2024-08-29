@@ -1,0 +1,19 @@
+.fileStatusWait,
+.fileStatusUpload,
+.fileStatusComplete {
+  font-size: 12px;
+  span {
+    font-size: 12px;
+  }
+}
+.fileStatusWait {
+  span:not([role='img']) {
+    color: rgba(58, 65, 92, 0.68);
+  }
+}
+
+.fileStatusUpload {
+  span:not([role='img']) {
+    color: @primary-color;
+  }
+}

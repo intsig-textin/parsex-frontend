@@ -1,0 +1,110 @@
+.exportModal {
+  padding-bottom: 0;
+  background: #ffffff;
+  border-radius: 4px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.2);
+  .exportbtn {
+    width: 120px;
+    height: 40px;
+    border: 1px solid #4877ff;
+    border-radius: 8px;
+    border-radius: 8px;
+  }
+  .exportTitle {
+    margin-bottom: 10px;
+    color: #3a415c;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: PingFangSC-Semi;
+    line-height: 16px;
+    letter-spacing: 0;
+  }
+  .radioStyle {
+    display: block;
+    height: 30px;
+    // line-height: 30px;
+    margin-top: 10px;
+    white-space: nowrap;
+    span {
+      color: #3a415c;
+      font-size: 14px;
+      font-family: PingFangSC-Regular;
+      line-height: 14px;
+    }
+  }
+  .exportType {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    width: 382px;
+    .radioStyle {
+      box-sizing: border-box;
+      overflow: hidden;
+      &:nth-child(1n) {
+        width: 142px;
+        margin-right: 12px;
+      }
+      &:nth-child(2n) {
+        width: 142px;
+        margin-right: 12px;
+      }
+      &:nth-child(3n) {
+        width: 72px;
+        margin-right: 0;
+      }
+    }
+  }
+  :global {
+    .ant-modal-body {
+      padding: 30px;
+    }
+    .ant-modal-footer {
+      padding: 0px 30px 30px;
+      border-top: none;
+    }
+    .antd-pro-components-export-modal-index-exportModal {
+      background: none;
+      border-radius: none;
+      box-shadow: none;
+    }
+  }
+}
+
+.popover {
+  width: 247px;
+  height: 108px;
+  padding: 14px 20px;
+  overflow: hidden;
+  color: #3a415c;
+  font-size: 12px;
+  font-family: PingFangSC-Regular;
+  line-height: 20px;
+  background: #dee8fa;
+  border-radius: 6px;
+}
+
+:global {
+  .textin-exportModel-tip {
+    .ant-popover-inner {
+      overflow: hidden;
+      border-radius: 6px;
+      box-shadow: none;
+    }
+    .ant-popover-inner-content {
+      padding: 0px;
+    }
+    .ant-popover-content .ant-popover-arrow {
+      left: 6px;
+      border-top-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: #dee8fa;
+      border-left-color: #dee8fa;
+      box-shadow: none;
+    }
+  }
+  .ant-modal.antd-pro-components-export-modal-index-exportModal {
+    padding-bottom: 0px;
+  }
+}

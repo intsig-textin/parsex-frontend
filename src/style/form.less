@@ -1,0 +1,268 @@
+@text-color-68: rgba(58, 65, 92, 0.68);
+@dark-gray: #cacad4;
+@text-color-50: rgba(58, 65, 92, 0.5);
+
+:global {
+  .textin-boss-formWrap {
+    .group-title {
+      margin-bottom: 30px;
+      color: @text-color;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 26px;
+    }
+    .ant-form-item {
+      margin-bottom: 20px;
+      .ant-form-item-label {
+        width: 108px;
+        text-align: left;
+        label {
+          color: @text-color;
+          span {
+            color: #868a9c;
+            font-size: 12px;
+            letter-spacing: 0;
+            transform: scale(0.8);
+          }
+        }
+      }
+      .ant-form-item-required {
+        &::before {
+          position: absolute;
+          right: 9px;
+          margin: 0 0 0 2px !important;
+          color: #ef6463 !important;
+        }
+        &::after {
+          margin: 0 0 0 12px !important;
+        }
+      }
+      .ant-form-item-control,
+      .ant-form-item-control-input {
+        // border: 1px solid #E4E4EB;
+        border-radius: 4px;
+        .ant-input,
+        .ant-input-number-input {
+          padding-right: 16px;
+          padding-left: 16px;
+          &::placeholder {
+            color: @placeholder-color;
+          }
+        }
+        .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+          padding: 0 16px;
+          input,
+          textarea {
+            &::placeholder {
+              color: @placeholder-color;
+            }
+          }
+        }
+        input[type='text'] {
+          width: 378px;
+        }
+        input[type='url'] {
+          width: 693px;
+        }
+        textarea {
+          position: relative;
+          width: 693px;
+          height: 54px;
+        }
+        .ant-select {
+          width: 176px;
+        }
+        .ant-picker {
+          width: 278px;
+          border-color: @dark-gray;
+          border-radius: 4px;
+        }
+        .ant-input-textarea-show-count {
+          position: relative;
+          &::after {
+            position: absolute;
+            bottom: 24px;
+            left: 619px;
+            display: inline;
+            width: 60px;
+            color: @text-color-68;
+            font-size: 12px;
+            text-align: right;
+            transform: scale(0.8);
+          }
+        }
+        .ant-input-affix-wrapper {
+          padding: 4px 14px 4px 0;
+          border: 1px solid @dark-gray;
+          input[type='text'] {
+            width: 344px;
+          }
+        }
+        .ant-form-item-control-input-content {
+          .ant-input-affix-wrapper,
+          .ant-select-selector {
+            border-radius: 4px;
+          }
+          .ant-input-number-input {
+            width: 376px;
+          }
+        }
+
+        .ant-input-number,
+        .ant-input-number-input {
+          width: 378px;
+          .ant-input-number-handler-wrap {
+            display: none;
+          }
+        }
+        // 自定义slect
+        .form-custom-select {
+          position: relative;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          width: 599px;
+          height: auto;
+          min-height: 32px;
+          padding: 4px 14px 0px 14px;
+          background-color: #f5f5f5;
+          border: 1px solid @dark-gray;
+          border-radius: 4px;
+          .placeholder {
+            position: relative;
+            top: -2px;
+            color: @text-color-50;
+          }
+          .fix-placeholder {
+            position: absolute;
+            top: 9px;
+            right: 40px;
+            line-height: 1;
+          }
+          .suffix {
+            position: absolute;
+            top: 9px;
+            right: 14px;
+            color: @dark-gray;
+          }
+        }
+      }
+      .ant-radio-group {
+        .ant-radio-wrapper {
+          margin-right: 12px;
+          color: @text-color-68;
+        }
+      }
+    }
+    .ant-row {
+      .ant-form-item {
+        margin-bottom: 0px;
+      }
+    }
+
+    .ant-input,
+    .ant-input-number,
+    // .ant-input-number-input-wrap,
+    .ant-select-selector {
+      border: 1px solid @dark-gray;
+      border-radius: 4px;
+      &::placeholder {
+        color: @placeholder-color;
+      }
+    }
+    .ant-select {
+      .ant-select-selector {
+        border: 1px solid @dark-gray;
+        .ant-select-selection-placeholder {
+          color: @placeholder-color;
+        }
+      }
+    }
+
+    .ant-form-item-has-error {
+      .ant-form-item-control {
+        .form-custom-select,
+        .ant-input-affix-wrapper {
+          border: 1px solid #ff4d4f;
+        }
+      }
+      .ant-input,
+      .ant-input-number,
+      .ant-select-selector {
+        border: 1px solid #ff4d4f;
+      }
+      .ant-select {
+        .ant-select-selector {
+          border: 1px solid #ff4d4f;
+        }
+      }
+
+      .ant-input-affix-wrapper {
+        .ant-input {
+          border-color: transparent;
+        }
+      }
+    }
+    .link {
+      display: inline-block;
+      margin-left: 12px;
+      color: #4877ff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  }
+  .ant-divider-horizontal {
+    margin: 30px 0;
+  }
+  // select 内容
+  .textin-boss-form-select {
+    padding: 8px 0;
+    font-weight: normal;
+    text-align: center !important;
+    .ant-select-item {
+      color: @text-color-68;
+    }
+    .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+      color: @text-color;
+      background-color: #f7f7fb;
+    }
+  }
+  .search {
+    width: 82px;
+    margin-left: 12px;
+    color: #4877ff;
+    border: #4877ff 1px solid;
+    border-radius: 4px;
+  }
+}
+
+:global {
+  .textin-form-info {
+    .ant-form-item {
+      margin-bottom: 20px;
+      .ant-form-item-label {
+        min-width: 82px;
+        height: 20px;
+        margin-right: 20px;
+        text-align: left;
+        label {
+          height: 20px;
+          color: @text-color-68;
+          font-size: 14px;
+          line-height: 20px;
+          span {
+            color: #868a9c;
+            font-size: 14px;
+            line-height: 20px;
+            letter-spacing: 0;
+          }
+        }
+      }
+      .ant-form-item-control {
+        .ant-form-item-control-input {
+          min-height: 20px;
+        }
+      }
+    }
+  }
+}

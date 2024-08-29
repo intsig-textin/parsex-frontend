@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="80px" viewBox="0 0 80 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    >
+    <defs>
+        <rect id="path-1" x="0" y="0" width="80" height="80" rx="2.85714286"></rect>
+    </defs>
+    <g id="img_error" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="位图">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="蒙版" fill="#F1F3F5" xlink:href="#path-1"></use>
+            <path d="M23.3450303,49.6964703 L53.6479431,79.9992136 L2.85714286,80 C1.27918643,80 -2.47128977e-15,78.7208136 0,77.1428571 L-5.69214722e-05,66.9802136 L17.284115,49.6964703 C18.9577906,48.0227947 21.6713548,48.0227947 23.3450303,49.6964703 Z" id="形状结合" fill="#DCDFE5" opacity="0.46366519" mask="url(#mask-2)"></path>
+            <path d="M44.1510155,31.821208 L79.999,52.5173155 L80,77.1428571 C80,78.7208136 78.7208136,80 77.1428571,80 L11.387,79.9993155 L38.2966209,33.3898883 C39.4800883,31.3400628 42.10119,30.6377407 44.1510155,31.821208 Z" id="形状结合" fill="#DCDFE5" mask="url(#mask-2)"></path>
+            <g id="矩形-+-矩形备份-12-蒙版" mask="url(#mask-2)" fill="#DCDFE5">
+                <g transform="translate(15.023902, 17.489452)" id="椭圆形">
+                    <circle cx="7.93600623" cy="7.93600623" r="7.93600623"></circle>
+                </g>
+            </g>
+        </g>
+        <polygon id="路径-6" fill="#FFFFFF" points="42.2530365 0 25.3145727 23.2388306 43.8894958 41.0350952 28.7894897 63.0109406 40.8894958 80 33.9189911 61.8139343 55.6479431 41.0350952 40.8894958 19.9362869 58.4461212 0"></polygon>
+    </g>
+</svg>

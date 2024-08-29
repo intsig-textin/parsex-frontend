@@ -1,0 +1,22 @@
+:global {
+  .rc-virtual-list {
+    .ant-select-item-option-selected,
+    .ant-select-item-option-active {
+      .ant-select-item-option-content {
+        font-weight: normal !important;
+      }
+    }
+    .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+      background-color: #e9f0ff;
+    }
+    .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+      background: #f2f5fa;
+    }
+  }
+  .rc-virtual-list-scrollbar {
+    width: 6px !important;
+    .rc-virtual-list-scrollbar-thumb {
+      background-color: fade(#858c99, 20%) !important;
+    }
+  }
+}

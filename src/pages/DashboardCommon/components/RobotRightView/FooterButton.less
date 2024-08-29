@@ -1,0 +1,73 @@
+@textColor: #3a415c;
+@textColor-68: rgba(58, 65, 92, 0.68);
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  padding: 20px;
+  color: @textColor-68;
+  :global {
+    .ant-space-item {
+      & > .ant-btn {
+        margin: 0;
+      }
+    }
+    .ant-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 12px;
+      font-size: 14px;
+      border-radius: 4px;
+      &.ant-btn-primary:focus {
+        background: #4877ff;
+        opacity: 1;
+      }
+    }
+    .ant-btn-primary[disabled],
+    .ant-btn-copy[disabled] {
+      color: #c0c4cc;
+      background: #f2f5fa;
+      border: 1px solid #dcdfe5;
+    }
+    .ant-btn-export {
+      .anticon {
+        font-size: 18px;
+
+        & + span {
+          margin-left: 4px;
+        }
+      }
+    }
+
+    // .ant-btn-table-export {
+
+    // }
+
+    .operate-note {
+      margin-top: 20px;
+      color: @textColor-68;
+    }
+  }
+  .copy {
+    // cursor: not-allowed;
+    min-width: 56px;
+  }
+  .active {
+    color: #4877ff;
+    cursor: pointer;
+  }
+  .feedback {
+    width: 80px;
+    height: 32px;
+    margin-left: 12px;
+    color: #030a1a;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    background: #ffffff;
+    border: 1px solid #dcdfe5;
+    border-radius: 4px;
+  }
+}

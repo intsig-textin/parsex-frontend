@@ -1,0 +1,53 @@
+@navHeight: 50px;
+@noteColor: rgba(58, 65, 92, 0.68);
+.left-bar-main {
+  flex: 1;
+  max-height: calc(100% - 70px);
+  overflow-y: auto;
+  h3 {
+    margin-bottom: 0;
+    margin-bottom: 16px;
+    padding-left: 24px;
+    color: #3a415c;
+    font-size: 14px;
+    line-height: 40px;
+  }
+  .file-item {
+    padding: 0 12px 0 20px;
+    overflow: hidden;
+    color: @noteColor;
+    line-height: 40px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    border-left: 4px solid transparent;
+    cursor: pointer;
+    .anticon {
+      margin-right: 10px;
+    }
+    &.active {
+      color: #000;
+      border-color: #4877ff;
+      .anticon {
+        color: #537fff;
+      }
+    }
+    &:hover {
+      color: #000;
+    }
+  }
+}
+.left-bar-footer {
+  box-sizing: border-box;
+  padding: 10px 24px 30px;
+  text-align: center;
+  .ant-btn {
+    min-width: 138px;
+    min-height: 40px;
+    border-radius: 8px;
+  }
+  .operate-note {
+    margin-top: 20px;
+    color: @noteColor;
+  }
+}

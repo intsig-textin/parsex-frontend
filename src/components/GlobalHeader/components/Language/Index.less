@@ -1,0 +1,50 @@
+.langTip {
+  min-width: 100px;
+  color: #3a415c;
+  font-size: 14px;
+  text-align: right;
+  span {
+    display: inline-block;
+    margin-left: 10px;
+  }
+  .icon {
+    // height: 14px;
+    position: relative;
+    top: -1px;
+    display: inline-block;
+    width: 14px;
+    margin-left: 8px;
+    transition: all 0.3s linear;
+  }
+  &:hover {
+    .icon {
+      transform: rotate(180deg);
+      transition: all 0.3s linear;
+    }
+  }
+}
+.langItem {
+  padding: 5px 10px;
+  cursor: pointer;
+  &:hover {
+    color: #4877ff;
+  }
+}
+.active {
+  color: #4877ff;
+}
+
+:global {
+  .textin-language-popover {
+    padding-top: 0 !important;
+  }
+  .textin-language-popover > .ant-popover-content > .ant-popover-arrow {
+    display: none !important;
+  }
+  .textin-language-popover
+    > .ant-popover-content
+    > .ant-popover-inner
+    > .ant-popover-inner-content {
+    padding: 20px !important;
+  }
+}

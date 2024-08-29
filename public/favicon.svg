@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+    <defs>
+        <rect id="path-1" x="0" y="0" width="20" height="20"></rect>
+        <path d="M10.987309,19.4248692 L17.6621531,15.5755478 C18.2795756,15.2194859 18.66,14.5609478 18.66,13.8482131 L18.66,6.15190385 C18.66,5.43917735 18.2795843,4.78064551 17.6621729,4.4245806 L10.9873241,0.575154722 C10.3701898,0.219249626 9.61005808,0.219629988 8.99328029,0.576152521 L2.33609897,4.42427282 C1.71966145,4.78059866 1.34,5.43858471 1.34,6.15059827 L1.34,13.8494769 C1.34,14.5614957 1.71966699,15.2194857 2.33611167,15.5758097 L8.99329769,19.4238673 C9.61006651,19.7803786 10.3701823,19.7807605 10.987309,19.4248692 Z" id="path-3"></path>
+        <polygon id="path-5" points="8.66 20.04 17.32 15.0400986 17.34 5 8.66 0 -9.71282189e-06 5.04005835 -9.71282189e-06 15.0400266"></polygon>
+        <linearGradient x1="93.8827866%" y1="44.7171727%" x2="40.3585211%" y2="30.5752565%" id="linearGradient-7">
+            <stop stop-color="#0050EF" offset="0%"></stop>
+            <stop stop-color="#0260FF" offset="15.3297207%"></stop>
+            <stop stop-color="#0F79FE" offset="29.163465%"></stop>
+            <stop stop-color="#6AD9FA" offset="70.8406857%"></stop>
+            <stop stop-color="#A5F3FF" offset="100%"></stop>
+        </linearGradient>
+        <polygon id="path-8" points="8.66 20.02 17.32 15.0200986 17.34 5.02 8.64 0 -9.71282189e-06 5.02005835 -9.71282189e-06 15.0200266"></polygon>
+        <linearGradient x1="57.4389206%" y1="66.3119568%" x2="41.8624148%" y2="54.3692442%" id="linearGradient-10">
+            <stop stop-color="#64A6FF" offset="0%"></stop>
+            <stop stop-color="#1048E7" offset="100%"></stop>
+        </linearGradient>
+        <polygon id="path-11" points="8.68 20.02 17.32 15.0000986 17.32 5.00003358 8.66 0 -9.71282189e-06 5.00005835 -9.71282189e-06 15.0000266"></polygon>
+        <linearGradient x1="42.5370426%" y1="36.8681587%" x2="57.4629574%" y2="53.7729312%" id="linearGradient-13">
+            <stop stop-color="#5FA9FF" offset="0%"></stop>
+            <stop stop-color="#0050EF" offset="100%"></stop>
+        </linearGradient>
+        <polygon id="path-14" points="8.58 20 17.32 15.0000986 17.32 5.00003358 8.66 0 -9.71282189e-06 5.00005835 0.02 15.04"></polygon>
+        <linearGradient x1="75.7539357%" y1="70.9031472%" x2="3.69801809%" y2="56.4289943%" id="linearGradient-16">
+            <stop stop-color="#3F76FF" offset="0%"></stop>
+            <stop stop-color="#3670F4" offset="51.6330591%"></stop>
+            <stop stop-color="#004CE0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Textin-mobile-新logo版本" transform="translate(-440.000000, -529.000000)">
+            <g id="编组-6" transform="translate(370.000000, 194.000000)">
+                <g id="分组-9" transform="translate(0.000000, 213.000000)">
+                    <g id="qrcode_ios" transform="translate(12.000000, 64.000000)">
+                        <g id="qrcode——logo" transform="translate(68.000000, 68.000000) scale(-1, 1) translate(-68.000000, -68.000000) translate(58.000000, 58.000000)">
+                            <g id="编组备份" transform="translate(10.000000, 10.000000) scale(-1, 1) translate(-10.000000, -10.000000) ">
+                                <mask id="mask-2" fill="white">
+                                    <use xlink:href="#path-1"></use>
+                                </mask>
+                                <g id="矩形"></g>
+                                <mask id="mask-4" fill="white">
+                                    <use xlink:href="#path-3"></use>
+                                </mask>
+                                <g id="路径-8"></g>
+                                <g id="编组-7" mask="url(#mask-4)">
+                                    <g transform="translate(1.340000, 9.960000)">
+                                        <mask id="mask-6" fill="white">
+                                            <use xlink:href="#path-5"></use>
+                                        </mask>
+                                        <g id="路径-8备份-3" stroke="none" fill="none"></g>
+                                        <path d="M10.4019876,1.02772 L17.34,5.04 L17.3389876,5.75172 L3.51522,13.7336207 L-1.23828122e-05,7.64272 L-1.23828122e-05,7.03372 L10.4019876,1.02772 Z" id="形状结合备份" stroke="none" fill="url(#linearGradient-7)" fill-rule="evenodd" mask="url(#mask-6)"></path>
+                                    </g>
+                                </g>
+                                <g id="编组-3" mask="url(#mask-4)">
+                                    <g transform="translate(-7.320000, 4.980000)">
+                                        <mask id="mask-9" fill="white">
+                                            <use xlink:href="#path-8"></use>
+                                        </mask>
+                                        <g id="路径-8" stroke="none" fill="none"></g>
+                                        <path d="M15.62,-4.00619152 L15.62,14.0378085 L8.66,10.0200266 L8.66,-0.0199416542 L15.62,-4.00619152 Z" id="形状结合" fill="url(#linearGradient-10)" fill-rule="evenodd" stroke-linecap="square" mask="url(#mask-9)"></path>
+                                    </g>
+                                </g>
+                                <g id="编组-5" mask="url(#mask-4)">
+                                    <g transform="translate(10.000000, -5.000000)">
+                                        <mask id="mask-12" fill="white">
+                                            <use xlink:href="#path-11"></use>
+                                        </mask>
+                                        <g id="路径-8备份" stroke="none" fill="none"></g>
+                                        <path d="M1.7200021,5.99312 L8.66,10.0000336 L8.68,20 L1.7200021,24.00812 L1.7200021,5.99312 Z" id="形状结合备份" fill="url(#linearGradient-13)" fill-rule="evenodd" stroke-linecap="square" mask="url(#mask-12)"></path>
+                                    </g>
+                                </g>
+                                <g id="编组-8" mask="url(#mask-4)">
+                                    <g transform="translate(1.340000, -10.000000)">
+                                        <mask id="mask-15" fill="white">
+                                            <use xlink:href="#path-14"></use>
+                                        </mask>
+                                        <g id="路径-8备份-2" stroke="none" fill="none" opacity="0.5"></g>
+                                        <path d="M13.78478,6.30637933 L17.32,12.4303793 L17.32,13.0173793 L6.937,19.0123793 L0,15.0400266 L0,14.2653793 L13.78478,6.30637933 Z" id="形状结合备份" fill="url(#linearGradient-16)" fill-rule="evenodd" stroke-linecap="square" mask="url(#mask-15)"></path>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

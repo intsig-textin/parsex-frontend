@@ -1,0 +1,105 @@
+@navHeight: 50px;
+@robotHeader: 40px;
+@noteColor: rgba(58, 65, 92, 0.68);
+
+.container {
+  flex-wrap: nowrap;
+  height: calc(100vh - @navHeight - @robotHeader);
+  min-height: 656px;
+  overflow-x: auto;
+
+  .leftBar {
+    position: relative;
+    z-index: 2;
+    flex: 0 0 298px;
+    width: 298px;
+    height: 100%;
+    background: #fff;
+    border-right: 1px solid #dcdfe5;
+    transition: all 0.3s;
+    //  box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.1);
+    &.barCollapsed {
+      flex: 0 0 0;
+      width: 0;
+    }
+    .leftBarAnimate {
+      height: 100%;
+      overflow: hidden;
+      .leftBarContent {
+        display: flex;
+        flex-direction: column;
+        width: 298px;
+        min-width: 298px;
+        height: 100%;
+      }
+    }
+    .collapsedBar {
+      position: absolute;
+      top: calc(50% - 25px);
+      right: -20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 50px;
+      color: #fff;
+      font-size: 16px;
+      background-color: #aaa;
+      border-radius: 0 8px 8px 0;
+      transform: perspective(30px) rotateY(22deg);
+      cursor: pointer;
+      opacity: 0.5;
+      transition: opacity 0.3s;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .mainContent {
+    flex: 1;
+    min-width: 450px;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #f2f5fa;
+  }
+
+  .rightBar {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 450px;
+    height: 100%;
+    overflow-y: hidden;
+    background: #fff;
+    border-left: 1px solid #dcdfe5;
+    // box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.1);
+
+    :global {
+      .result-content-body {
+        [data-page-number]:not(:only-child) {
+          &:not(:empty):after {
+            display: block;
+            margin: 8px 0 20px;
+            color: @text-gray-color;
+            font-size: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            content: '[第' attr(data-page-number) '页]';
+            user-select: none;
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 1280px) {
+  .rightBar {
+    width: 358px !important;
+    min-width: 358px !important;
+  }
+}

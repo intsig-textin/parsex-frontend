@@ -1,0 +1,91 @@
+.catalog {
+  display: flex;
+  flex: 0 0 220px;
+  flex-direction: column;
+  width: 220px;
+  height: 100%;
+  padding: 12px 0 20px 20px;
+  overflow: hidden;
+  color: #475266;
+  background-color: #fff;
+  // transition: width 0.1s;
+
+  &.catalog-collapsed {
+    position: absolute;
+    z-index: 10;
+    width: 95px;
+    height: 40px;
+    background-color: transparent;
+
+    .catalogContent {
+      width: 0;
+    }
+  }
+
+  .catalogTitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-right: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    cursor: pointer;
+  }
+
+  .catalogContent {
+    flex: 1 1 auto;
+    width: 100%;
+    overflow: hidden auto;
+    // transition: width 0.1s;
+    scrollbar-color: hsla(240, 7%, 70%, 0.4) transparent;
+    scrollbar-width: thin;
+  }
+
+  :global {
+    .ant-tree-treenode {
+      width: 100%;
+      color: #475266;
+      white-space: nowrap;
+
+      .ant-tree-node-content-wrapper {
+        background-color: #fff !important;
+
+        &:hover,
+        &.ant-tree-node-selected {
+          color: @primary-color;
+        }
+      }
+
+      .ant-tree-node-content-wrapper {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .ant-tree-indent-unit:empty {
+        display: none;
+      }
+      .ant-tree-switcher {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+
+        .anticon {
+          color: @text-gray-color;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+:global {
+  .mainViewContainer {
+    display: flex;
+
+    & > div:not(:first-child) {
+      flex: 1 1 auto;
+    }
+  }
+}

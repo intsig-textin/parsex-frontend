@@ -1,0 +1,617 @@
+@import './style/table.less';
+@import './style/select.less';
+@import './style/param.less';
+@import './style/date-picker.less';
+@import './style/common.less';
+@import './style/font.less';
+@import './style/ie.less';
+
+@maxWidth: 1200px;
+@minWidth: 1180px;
+
+html,
+body,
+#root {
+  position: relative;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: hidden;
+  // overflow: auto;
+  // font-family: PingFangSC, 'Microsoft YaHei', Arial;
+}
+
+html {
+  text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.h5 {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+// 初始化系统默认样式
+article,
+aside,
+blockquote,
+body,
+button,
+code,
+dd,
+details,
+div,
+dl,
+dt,
+fieldset,
+figcaption,
+figure,
+footer,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+hgroup,
+hr,
+input,
+legend,
+li,
+menu,
+nav,
+ol,
+p,
+pre,
+section,
+td,
+textarea,
+th,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+.maxContainer {
+  width: @maxWidth;
+  margin: auto;
+}
+
+.flowContainer {
+  width: 100%;
+  background: #f4f3f880;
+}
+
+/**
+* @desc 首页中头部 banner
+*/
+.homeBanner {
+  :global {
+    .ant-card-cover {
+      margin: 0;
+
+      img {
+        width: 100%;
+        height: 660px;
+      }
+    }
+  }
+}
+
+.homeBannerContainer {
+  position: relative;
+  width: 1200px;
+  min-width: 1180px;
+  text-align: center;
+  .title {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 54px;
+    line-height: 60px;
+    text-align: center;
+  }
+  .bannarTitle1 {
+    width: 193px;
+    height: 44px;
+    color: #05102a;
+    font-weight: 500;
+    font-size: 30px;
+    font-family: 'PingFangSC-Medium, PingFang SC,Microsoft YaHei,Arial';
+    line-height: 44px;
+    white-space: nowrap;
+    opacity: 0.4;
+  }
+  .bannarTitle2 {
+    width: 472px;
+    height: 44px;
+    margin-top: 13px;
+    color: #05102a;
+    font-weight: 600;
+    font-size: 44px;
+    font-family: 'PingFangSC-Medium, PingFang SC,Microsoft YaHei,Arial';
+    line-height: 44px;
+    letter-spacing: 2px;
+  }
+  .bannarTitle3 {
+    width: 466px;
+    height: 44px;
+    margin-top: 40px;
+    color: #05102a;
+    font-weight: 500;
+    font-size: 15px;
+    font-family: 'PingFangSC-Medium, PingFang SC,Microsoft YaHei,Arial';
+    line-height: 22px;
+    text-align: left;
+    text-shadow: 0px 2px 10px #f7f7fb;
+  }
+  .qrcodeBox {
+    z-index: auto;
+    justify-content: space-between;
+    width: 340px;
+    height: 213px;
+    margin-top: 40px;
+  }
+
+  .iosBox {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 160px;
+    height: 212px;
+    background: #868a9c;
+    border-radius: 8px;
+  }
+  .iosBoxTop {
+    z-index: auto;
+    justify-content: space-between;
+    width: 128px;
+    height: 36px;
+    margin-left: 2px;
+  }
+  .iconLog {
+    position: absolute;
+    top: 16px;
+    left: 14px;
+    z-index: 526;
+    width: 36px;
+    height: 36px;
+  }
+  .iosBoxText {
+    z-index: auto;
+    width: 84px;
+    height: 32px;
+  }
+  .word5 {
+    position: absolute;
+    top: 18px;
+    left: 58px;
+    color: #fff;
+    font-size: 12px;
+  }
+  .info3 {
+    position: absolute;
+    top: 34px;
+    left: 58px;
+    color: #fff;
+    font-size: 16px;
+  }
+  .iosBoxBot {
+    position: absolute;
+    top: 64px;
+    left: 12px;
+    padding: 6px 6px 0;
+    padding-bottom: 0;
+    background: #fff;
+    border: none;
+    border-radius: 8px;
+  }
+  .qrcodeImg {
+    width: 136px;
+    height: 136px;
+  }
+  .qrcodeLogo {
+    position: absolute;
+    top: 55px;
+    left: 57px;
+    width: 26px;
+    height: 26px;
+    padding: 1px;
+    background: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0px 0px 20px 0px #fff inset;
+  }
+  .qrcodeLogoImg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .androidBox {
+    position: absolute;
+    bottom: 0;
+    left: 180px;
+    width: 160px;
+    height: 212px;
+    background: #868a9c;
+    border-radius: 8px;
+  }
+  .androidBoxTop {
+    z-index: auto;
+    justify-content: space-between;
+    width: 128px;
+    height: 36px;
+    margin-left: 2px;
+  }
+  .iconLog {
+    position: absolute;
+    top: 16px;
+    left: 14px;
+    z-index: 526;
+    width: 36px;
+    height: 36px;
+  }
+  .androidBoxText {
+    z-index: auto;
+    width: 84px;
+    height: 32px;
+  }
+  .androidWord5 {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    color: #fff;
+    font-size: 12px;
+  }
+  .androidInfo3 {
+    position: absolute;
+    top: 34px;
+    right: 21px;
+    color: #fff;
+    font-size: 16px;
+  }
+  .androidBoxBot {
+    position: absolute;
+    top: 64px;
+    left: 12px;
+    padding: 6px 6px 0;
+    padding-bottom: 0;
+    background: #fff;
+    border: none;
+    border-radius: 8px;
+  }
+  .desc {
+    padding: 48px 0;
+    color: #ffffff;
+    font-weight: lighter;
+    font-size: 18px;
+    line-height: 30px;
+    text-align: center;
+
+    p {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  h1,
+  p {
+    margin: 0;
+  }
+
+  .button {
+    color: #4877ff;
+    background-color: #fff;
+    border: none;
+    &:hover,
+    &:focus {
+      background: #fff;
+    }
+  }
+}
+
+.homeBannerTitle {
+  width: 510px;
+  font-size: 46px;
+  line-height: 68px;
+}
+
+.homeBannerDesc {
+  width: 510px;
+  font-size: 18px;
+  line-height: 30px;
+}
+
+.title {
+  font-size: 34px;
+  line-height: 48px;
+}
+
+.cardTitle {
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.profitItem {
+  .text {
+    padding: 21px 0;
+    font-size: 16px;
+    line-height: 30px;
+  }
+}
+
+.pointer {
+  cursor: pointer;
+  user-select: none;
+}
+
+:global {
+  .card-shadow {
+    border: none !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 10px 0 rgba(167, 183, 219, 0.2) !important;
+  }
+}
+
+// 全局自定义 popover 样式
+:global {
+  .charge-tool-tip {
+    .ant-tooltip-content {
+      .ant-tooltip-arrow {
+        box-shadow: none !important;
+      }
+
+      .ant-tooltip-inner {
+        width: 200px !important;
+        padding: 8px 11px !important;
+        color: #3a415c !important;
+        font-size: 12px !important;
+        border-radius: 6px !important;
+        box-shadow: none !important;
+      }
+    }
+  }
+}
+
+:global {
+  //重置ant-button hover 颜色
+  button.ant-btn {
+    box-shadow: none !important;
+    &-primary {
+      &:hover {
+        background: @hover-blue-color;
+        border-color: @hover-blue-color;
+      }
+      &:focus {
+        background: @primary-color;
+        border-color: @blue-light-color;
+
+        &:hover {
+          background: @hover-blue-color;
+          border-color: @hover-blue-color;
+        }
+      }
+    }
+    &-link {
+      &:hover,
+      &:focus {
+        color: @hover-blue-color;
+        border: none;
+      }
+    }
+
+    &.solid-btn {
+      color: @primary-color;
+      font-size: 14px;
+      border: 1px solid @blue-light-color;
+      border-radius: @btn-border-radius-base;
+
+      &:not(.btn-disabled):not([disabled]):hover {
+        border-color: @primary-color;
+      }
+
+      &[disabled] {
+        color: @disabled-color;
+        background: @disabled-bg;
+        border-color: @border-color-base;
+      }
+    }
+  }
+  .scroll {
+    overflow: auto;
+    scrollbar-face-color: #e8e8e8;
+    scrollbar-track-color: #ecedff;
+  }
+
+  .scroll::-webkit-scrollbar-track-piece {
+    background-color: #ecedff;
+  }
+
+  .scroll::-webkit-scrollbar-thumb {
+    height: 50px;
+    background-color: #e8e8e8;
+    border-radius: 4px;
+    outline: 2px solid #e8e8e8;
+    outline-offset: -2px;
+  }
+
+  .scroll::-webkit-scrollbar-thumb:hover {
+    height: 50px;
+    background-color: #e8e8e8;
+  }
+
+  .homeContainer {
+    width: 100%;
+    padding: 0 30px 0px;
+  }
+
+  .key {
+    color: #4877ff;
+  }
+}
+
+:global {
+  .link {
+    color: @primary-color;
+    font-size: 14px;
+    cursor: pointer;
+    &:hover {
+      color: #7099ff;
+      text-decoration: none;
+    }
+  }
+  .disable-link {
+    color: #868a9c;
+    font-size: 14px;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .underline_link {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .flowContainer,
+  .homeBanner {
+    width: @minWidth;
+  }
+}
+
+@media screen and (max-width: 1450px) {
+  .maxContainer {
+    width: @minWidth;
+    margin: auto;
+  }
+
+  .homeBanner {
+    :global {
+      .ant-card-cover {
+        img {
+          height: 660px;
+        }
+      }
+    }
+  }
+
+  .homeBannerContainer {
+    width: 996px;
+
+    .title {
+      font-size: 48px;
+      line-height: 54px;
+    }
+
+    .desc {
+      padding: 42px 0;
+      font-size: 16px;
+      line-height: 26px;
+    }
+  }
+
+  .homeBannerTitle {
+    width: 454px;
+    font-size: 40px;
+    line-height: 60px;
+  }
+
+  .homeBannerDesc {
+    width: 454px;
+    font-size: 16px;
+    line-height: 28px;
+  }
+
+  .title {
+    font-size: 30px;
+    line-height: 36px;
+  }
+
+  .cardTitle {
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .profitItem {
+    .text {
+      padding: 18px 0;
+      font-size: 14px;
+      line-height: 26px;
+    }
+  }
+}
+
+//Fix IE中下来框刷新页面问题
+@media only screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  :global {
+    .ant-dropdown,
+    .ant-select-dropdown,
+    .ant-picker-dropdown {
+      animation-duration: 0s !important;
+    }
+  }
+}
+
+:global {
+  .ant-modal-close-x {
+    font-size: 12px !important;
+  }
+  .ant-space {
+    width: 100%;
+  }
+}
+
+// fix table cell
+:global {
+  .ant-table-tbody > tr > td,
+  .ant-table-thead > tr > th,
+  .ant-table tfoot > tr > td,
+  .ant-table tfoot > tr > th {
+    word-break: break-all;
+  }
+}
+
+// 404
+
+:global {
+  .textin-404 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px 0;
+    background: #f7f7fb;
+    .textin-404-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 1200px;
+      height: 514px;
+      margin: 0px auto;
+      background: #ffffff;
+      border-radius: 2px;
+      box-shadow: 0px 2px 10px 0px rgba(167, 183, 219, 0.2);
+      .img-wrapper {
+        margin-bottom: 16px;
+      }
+      .title {
+        color: #3a415c;
+        font-weight: 600;
+        font-size: 14px;
+        text-align: center;
+      }
+      .desc {
+        color: #868a9c;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+        text-align: center;
+      }
+    }
+  }
+}

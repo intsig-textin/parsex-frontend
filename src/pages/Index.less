@@ -1,0 +1,218 @@
+@import '../global.less';
+
+.title {
+  padding-bottom: 60px;
+  color: #17144e;
+  text-align: center;
+}
+
+.keyBanner {
+  width: 732px;
+  height: 425px;
+  text-align: center;
+
+  img {
+    width: 100%;
+  }
+}
+
+.keyRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .keyItem {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    margin-top: 63px;
+
+    img {
+      width: 54px;
+    }
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    .itemTitle {
+      color: #3a415c;
+      font-size: 18px;
+      line-height: 30px;
+    }
+
+    .itemContent {
+      color: #3a415c;
+      font-weight: lighter;
+      font-size: 14px;
+      line-height: 30px;
+      opacity: 0.68;
+    }
+  }
+}
+
+.userValue {
+  font-weight: lighter;
+
+  .userValueTitle {
+    padding-bottom: 12px;
+    color: rgba(58, 65, 92, 1);
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .userValueContent {
+    height: 84px;
+    color: #3a415c;
+    font-size: 14px;
+    line-height: 28px;
+    opacity: 0.68;
+  }
+
+  .personalValue {
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 6px 25px 0 rgba(172, 188, 217, 0.5);
+
+    :global {
+      .ant-card {
+        height: 100%;
+      }
+
+      .ant-card-head {
+        background: rgba(71, 117, 255, 0.3);
+      }
+
+      .ant-card-head-title {
+        color: #4877ff;
+      }
+    }
+  }
+
+  .companyValue {
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 6px 25px 0 rgba(172, 188, 217, 0.5);
+
+    :global {
+      .ant-card-head {
+        background: rgba(202, 234, 255, 0.5);
+      }
+
+      .ant-card-head-title {
+        color: #01b1ff;
+      }
+    }
+  }
+
+  :global {
+    .ant-card-head {
+      opacity: 0.5;
+    }
+
+    .ant-card-body {
+      padding: 20px 30px;
+    }
+
+    .ant-card-head-title {
+      font-size: 20px;
+    }
+  }
+}
+
+.textContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 120px;
+
+  .textContent {
+    color: #3a415c;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 30px;
+
+    span {
+      font-weight: lighter;
+      font-size: 14px;
+    }
+  }
+}
+
+.homeTextContainer {
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  justify-content: center;
+}
+
+.chartContainer {
+  width: 100%;
+  padding: 0 120px;
+}
+
+.homeTextRightWrap {
+  text-align: right;
+  img {
+    width: 792px;
+    height: 462px;
+  }
+}
+
+.textTitle {
+  width: 100%;
+  color: #000855;
+  font-weight: bolder;
+  font-size: 48px;
+}
+
+.textDesc {
+  width: 100%;
+  padding: 30px 0 30px 0;
+  color: #3a415c;
+  font-size: 18px;
+}
+
+.textButton {
+  align-self: flex-start;
+  height: 40px;
+  padding: 0px 45px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+@media screen and (max-width: 1450px) {
+  .homeTextRightWrap {
+    text-align: right;
+    img {
+      width: 704px;
+      height: 411px;
+    }
+  }
+  .keyBanner {
+    width: 650px;
+    height: 377px;
+  }
+  .keyRight .keyItem {
+    .itemTitle {
+      font-size: 16px;
+      line-height: 26px;
+    }
+    .itemContent {
+      line-height: 26px;
+    }
+  }
+
+  .keyRight {
+    .keyItem {
+      margin-top: 56px;
+    }
+    img {
+      width: 48px;
+    }
+  }
+
+  .textDesc {
+    padding: 30px 0 30px 0;
+  }
+}

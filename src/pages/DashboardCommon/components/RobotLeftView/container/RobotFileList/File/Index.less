@@ -1,0 +1,80 @@
+.fileItem {
+  position: relative;
+  display: flex;
+  margin-bottom: 12px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  // padding: 12px;
+  // box-shadow: 0 2px 6px 0 rgba(167, 183, 219, 0.15);
+  cursor: pointer;
+  &:not(.active):hover {
+    // box-shadow: 0 2px 6px 0 rgba(167, 183, 219, 0.3);
+    border-color: #5e93ff;
+  }
+  .imgWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background-color: #dcdfe5;
+    border: 1px solid #dcdfe5;
+    :global {
+      .ant-image {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        img {
+          width: 100%;
+        }
+      }
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        &:not([src]) {
+          opacity: 0;
+        }
+      }
+    }
+  }
+  .file {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 12px;
+
+    .fileNameWrapper {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      .fileStatus {
+        display: flex;
+        align-items: center;
+        margin-right: 8px;
+      }
+    }
+    .fileName {
+      max-width: 128px;
+      overflow: hidden;
+      color: #030a1a;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      word-break: break-all;
+    }
+    .time {
+      height: 10px;
+      margin-top: 10px;
+      color: #858c99;
+      // font-weight: lighter;
+      font-size: 12px;
+      line-height: 12px;
+      // transform: scale(0.8);
+      //transform-origin: 0%;
+    }
+  }
+}
+.active {
+  border: 2px solid @primary-color-hover;
+}

@@ -1,0 +1,50 @@
+.drag_upload {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+
+  .upload_container {
+    background-color: #f2f5fa;
+    border: 1px dashed #a3c2ff;
+    border-radius: 2px;
+
+    .drag_upload_wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .image_wrapper {
+        display: flex;
+        width: 72px;
+        height: 72px;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .action_guide {
+        margin-top: 16px;
+        margin-bottom: 4px;
+        color: #030a1a;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 24px;
+        &:hover {
+          color: @primary-color-hover;
+        }
+      }
+      .desc {
+        width: 64.8%;
+        color: #858c99;
+        line-height: 20px;
+        //    word-wrap: break-word;
+        text-align: center;
+      }
+    }
+  }
+  :global {
+    .ant-upload-drag-hover {
+      background: #e9f0ff;
+      border-color: #a3c2ff;
+    }
+  }
+}

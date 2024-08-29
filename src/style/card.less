@@ -1,0 +1,169 @@
+/**
+* @name 用于市场、我的机器人 card外层样式
+*/
+.cardMixin() {
+  :global {
+    .ant-card-head,
+    .ant-card-body {
+      padding: 0;
+    }
+
+    .ant-card-contain-tabs .ant-card-head {
+      padding: 0 30px;
+    }
+
+    .ant-tabs {
+      .ant-tabs-tab {
+        margin: 0 60px 0 0 !important;
+        padding: 14px 0;
+        color: @text-color;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+      }
+
+      .ant-tabs-tab.ant-tabs-tab-active {
+        color: @primary-color;
+        font-weight: bold;
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      .ant-tabs-nav > .ant-tabs-nav-wrap > .ant-tabs-nav-list > .ant-tabs-ink-bar {
+        opacity: 0;
+      }
+    }
+  }
+}
+
+.textinTabCard {
+  :global {
+    .ant-card-head {
+      min-height: 50px;
+      padding: 0 30px;
+
+      .ant-tabs-large > .ant-tabs-nav .ant-tabs-tab {
+        margin-right: 60px;
+        padding: 14px 0;
+      }
+
+      .ant-tabs {
+        color: #868a9c;
+        font-size: 16px;
+        line-height: 22px;
+
+        .ant-tabs-ink-bar {
+          background: none;
+        }
+      }
+    }
+
+    .tableHeader {
+      padding: 15px 30px;
+
+      .ant-alert-message {
+        color: @text-color;
+      }
+
+      .headerTip {
+        padding: 7px 7px 7px 40px;
+        background: #f7f7fb;
+        border-color: @primary-color;
+        border-radius: 2px;
+
+        .ant-alert-icon {
+          left: 14px;
+          font-size: 14px;
+        }
+
+        .ant-alert-message {
+          font-size: 12px;
+          line-height: 22px;
+        }
+      }
+
+      .optionContainer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 30px;
+
+        .productContainer {
+          display: flex;
+          align-items: center;
+        }
+
+        .productTile {
+          margin-right: 16px;
+          color: @text-color;
+          font-size: 14px;
+          letter-spacing: 0.27px;
+        }
+
+        .productSelect {
+          width: 168px;
+
+          .ant-select-selection-item {
+            color: @text-color;
+            letter-spacing: 0.27px;
+          }
+        }
+
+        .ant-checkbox-wrapper {
+          .ant-checkbox + span {
+            padding: 0 12px;
+          }
+        }
+
+        .anticon-info-circle {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .depositHeaderWrap {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 30px;
+
+      .invoiceWrap {
+        display: flex;
+        align-items: center;
+
+        img {
+          width: 16px;
+          height: 16px;
+          cursor: pointer;
+        }
+
+        .ant-btn-link {
+          padding: 0 0 0 14px;
+
+          span {
+            line-height: 20px;
+          }
+        }
+      }
+    }
+
+    .ant-select .ant-select-arrow .anticon {
+      color: #868a9c;
+    }
+
+    .ant-pagination .anticon {
+      color: #3a415c;
+    }
+
+    .ant-select-focused:not(.ant-select-disabled).ant-select-single:not(.ant-select-customize-input)
+      .ant-select-selector {
+      box-shadow: none;
+    }
+
+    .headerTip {
+      font-size: 12px;
+      .ant-alert-message {
+        line-height: 22px;
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+.container {
+  position: relative;
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  .bottom {
+    position: absolute;
+    left: -190px;
+    animation: fadein 0.3s linear forwards;
+    .cardWrapper {
+      position: relative;
+      margin-top: 8px;
+      .arrow {
+        position: absolute;
+        top: -30px;
+        right: 15px;
+      }
+    }
+  }
+}

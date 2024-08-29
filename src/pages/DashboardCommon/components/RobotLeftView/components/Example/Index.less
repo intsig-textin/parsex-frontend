@@ -1,0 +1,86 @@
+@textColor: #3a415c;
+@textColor-68: rgba(58, 65, 92, 0.68);
+
+.demoWrapper {
+  width: 100%;
+  color: @textColor;
+  .mask {
+    background: #858c99;
+    opacity: 0.1;
+  }
+  .title {
+    // line-height: 40px;
+    display: flex;
+    align-items: center;
+    height: 36px;
+    color: @normal-font-color;
+    font-weight: bold;
+    font-size: 14px;
+    .desc {
+      color: @normal-icon-color;
+      font-weight: normal;
+      font-size: 12px;
+    }
+    .collapse_wrapper {
+      display: flex;
+      align-items: center;
+      .collapse_icon {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        path {
+          fill: @primary-color-hover;
+        }
+      }
+    }
+  }
+  .demoImage {
+    display: flex;
+    // justify-content: space-between;
+    align-content: center;
+    width: 100%;
+    padding: 12px 0;
+
+    .img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 78px;
+      height: 78px;
+      overflow: hidden;
+      background-position: center;
+      background-size: cover;
+      border: 1px solid #dcdfe5;
+      cursor: pointer;
+      &:not(:last-of-type) {
+        margin-right: 10px;
+      }
+      &:hover {
+        border-color: @primary-color-hover;
+      }
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+    .cur_select {
+      border-color: @primary-color-hover;
+      border-width: 2px;
+    }
+  }
+  :global {
+    .demo-collapsed {
+      display: none;
+      animation: demoCollapsed 2s ease-in-out;
+    }
+  }
+}
+
+@keyframes demoCollapsed {
+  0% {
+    display: flex;
+  }
+  100% {
+    display: none;
+  }
+}

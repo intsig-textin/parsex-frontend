@@ -1,0 +1,43 @@
+.robotUpload {
+  position: relative;
+  height: 40px;
+  margin-bottom: 12px;
+  background: #e9f0ff;
+  border: 1px dashed #a3c2ff;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  &:hover {
+    border-color: @primary-color-hover;
+  }
+  .upload_icon {
+    path {
+      fill: @primary-color-hover;
+    }
+  }
+  .uploadChildren {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4877ff;
+    .icon {
+      font-size: 16px;
+    }
+    .text {
+      margin-left: 4px;
+    }
+    .desc {
+      margin-left: 4px;
+      color: #a3c2ff;
+    }
+  }
+  img {
+    width: 16px;
+    height: 16px;
+  }
+}

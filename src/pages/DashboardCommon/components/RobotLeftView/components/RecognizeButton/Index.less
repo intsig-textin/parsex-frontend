@@ -1,0 +1,156 @@
+.recognizeButtonWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  .ocrButton {
+    width: 80px;
+    height: 32px;
+    padding: 0;
+    // margin-top: 12px;
+    color: #ffffff;
+    background: @primary-color-hover;
+    border-radius: 4px;
+    &:not(.ocrButtonDisable):hover {
+      background: #5e93ff;
+      border-color: #5e93ff;
+    }
+  }
+  .ocrButtonDisable {
+    color: rgba(58, 65, 92, 0.68);
+    color: #c0c4cc;
+    font-size: 14px;
+    background: #f2f5fa;
+    border: 1px solid #dcdfe5;
+    // font-family: PingFangSC-Regular;
+    // line-height: 14px;
+    // text-shadow: none;
+    // background: transparent;
+    // border-color: rgba(58, 65, 92, 0.68);
+    box-shadow: none;
+    // border: none;
+    // &:hover {
+    //   color: rgba(58, 65, 92, 0.68);
+    //   font-size: 14px;
+    //   font-family: PingFangSC-Regular;
+    //   line-height: 14px;
+    //   text-shadow: none;
+    //   background: transparent;
+    //   border-color: rgba(58, 65, 92, 0.68);
+    //   box-shadow: none;
+    // }
+  }
+  .cloudButton {
+    width: 124px;
+    height: 40px;
+    margin-left: 10px;
+    color: #ffffff;
+    font-size: 14px;
+    font-family: PingFangSC-Regular;
+    line-height: 22px;
+    text-align: center;
+    background: #4877ff;
+    border: 1px solid #4877ff;
+    border-radius: 8px;
+  }
+  .cloudButtonDisable {
+    background-color: #cacad4;
+    border: none;
+    button {
+      width: 124px;
+      height: 40px;
+      color: #ffffff;
+      font-size: 14px;
+      font-family: PingFangSC-Regular;
+      background: #cacad4;
+      border: 1px solid #cacad4;
+      border-color: #cacad4;
+      border-radius: 8px;
+    }
+  }
+  .cloudBtnWrapper {
+    :global {
+      .ant-btn[disabled]:hover,
+      .ant-btn[disabled]:focus,
+      .ant-btn[disabled]:active {
+        color: #ffffff;
+        background-color: #cacad4;
+        border: none;
+      }
+    }
+  }
+}
+.confirmModal {
+  background: #ffffff;
+  border-radius: 4px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.2);
+  .confirmTitle {
+    margin-bottom: 10px;
+    color: #3a415c;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: PingFangSC-Semi;
+    line-height: 16px;
+    letter-spacing: 0;
+  }
+  .confirmDesc {
+    color: #3a415c;
+    font-size: 14px;
+    font-family: PingFangSC-Regular;
+    line-height: 23px;
+  }
+  .footerDesc {
+    color: #868a9c;
+    font-size: 12px;
+    font-family: PingFangSC-Regular;
+    line-height: 12px;
+  }
+  .comfirmBtn {
+    width: 120px;
+    height: 40px;
+    border: 1px solid #4877ff;
+    border-radius: 8px;
+    border-radius: 8px;
+  }
+  :global {
+    .ant-modal-footer {
+      padding: 0px 16px 15px 16px;
+      border-top: none;
+    }
+    .ant-modal-body {
+      padding: 30px;
+    }
+  }
+}
+.popover {
+  width: 247px;
+  height: 66px;
+  padding: 14px 20px;
+  color: #3a415c;
+  font-size: 12px;
+  font-family: PingFangSC-Regular;
+  line-height: 20px;
+  background: #dee8fa;
+}
+:global {
+  .popoverFooterBtn {
+    .ant-popover-inner-content {
+      padding: 0px;
+    }
+    .ant-popover-content .ant-popover-arrow {
+      left: 6px;
+      border-top-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: #dee8fa;
+      border-left-color: #dee8fa;
+      box-shadow: none;
+    }
+    .ant-popover-inner {
+      box-shadow: none;
+    }
+  }
+  .ant-modal.antd-pro-pages-desktop-home-components-robot-left-view-recognize-button-confirmModal {
+    padding-bottom: 0px;
+  }
+}

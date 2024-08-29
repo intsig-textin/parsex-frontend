@@ -1,0 +1,29 @@
+.header_logo {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  min-width: 182px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  .logoLine {
+    width: 1px;
+    height: 20px;
+    margin: 0 6px;
+    background: #dcdfe5;
+    opacity: 0.5;
+  }
+
+  img {
+    height: 30px !important;
+  }
+
+  :global(body.h5) & {
+    margin-left: 10px;
+  }
+}
+
+.productName {
+  font-weight: bold;
+  font-size: 18px;
+}

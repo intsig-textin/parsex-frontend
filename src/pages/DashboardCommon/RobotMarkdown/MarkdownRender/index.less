@@ -1,0 +1,104 @@
+.markdown-body {
+  padding: 0 30px 0;
+  color: @text-color;
+
+  [data-content-id] {
+    margin-bottom: 12px;
+  }
+
+  a {
+    color: @primary-color;
+  }
+
+  p {
+    margin-bottom: 12px;
+  }
+
+  ol,
+  ul {
+    margin-left: 40px;
+    padding-left: 0;
+  }
+
+  table {
+    margin-bottom: 12px;
+
+    &,
+    & td,
+    & th {
+      border: 1px solid #999;
+    }
+
+    th,
+    td {
+      padding: 8px;
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: inherit;
+  }
+
+  :global {
+    .active {
+      color: @primary-color;
+
+      img,
+      table {
+        border: 1px solid @primary-color;
+      }
+
+      table {
+        border-color: #11a35f;
+      }
+
+      img {
+        border-color: #ed7b2b;
+      }
+    }
+
+    .copy-handle {
+      position: absolute;
+      top: 0;
+      left: 0px;
+      display: none;
+      cursor: pointer;
+    }
+
+    .content-container {
+      position: relative;
+      margin-left: -20px;
+      padding-left: 20px;
+      &:hover {
+        .copy-handle {
+          display: block;
+        }
+      }
+    }
+
+    .formula-item {
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+
+      .copy-handle {
+        top: calc(50% - 10px);
+      }
+    }
+
+    img {
+      max-width: 100%;
+      max-height: 100vh;
+    }
+  }
+}

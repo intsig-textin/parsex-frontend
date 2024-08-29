@@ -1,0 +1,34 @@
+.loadingWrap {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+.loadingContainer {
+  z-index: 10;
+  width: 240px;
+  height: 40px;
+  color: #ffffff;
+  line-height: 40px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  span {
+    padding-left: 16px;
+    font-weight: lighter;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}

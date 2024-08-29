@@ -1,0 +1,53 @@
+.confirmModal {
+  :global {
+    .ant-modal-body {
+      padding: 20px;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0px 20px 40px 0px rgba(3, 10, 26, 0.2);
+    }
+  }
+  .title {
+    display: flex;
+    align-items: center;
+    color: @text-color;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+    span {
+      margin-left: 8px;
+    }
+  }
+  .desc {
+    width: 336px;
+    margin-top: 12px;
+    margin-left: 23px;
+    color: @text-gray-color;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .btnWrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    .btnConfirm {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 12px;
+      color: #fff;
+      font-size: 14px;
+      line-height: 22px;
+      background: @primary-color;
+      border: 1px solid @primary-color;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}

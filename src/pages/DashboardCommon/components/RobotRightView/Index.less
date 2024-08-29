@@ -1,0 +1,79 @@
+.rightContainer {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+
+  :global {
+    .ant-tabs {
+      height: 100%;
+      & > .ant-tabs-nav {
+        margin-bottom: 0;
+        padding: 0 20px;
+        & .ant-tabs-nav-list {
+          width: 100%;
+
+          border-bottom: 1px solid #dcdfe5;
+        }
+        & .ant-tabs-nav-wrap::before,
+        & .ant-tabs-nav-wrap::after {
+          visibility: hidden;
+        }
+      }
+      .ant-tabs-nav-operations {
+        position: absolute;
+        visibility: hidden;
+        pointer-events: none;
+      }
+    }
+    .ant-tabs-top > .ant-tabs-nav::before {
+      border-color: transparent;
+    }
+
+    .ant-tabs-tab {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      // margin: 0;
+      // margin-left: 20px;
+      padding: 9px 0;
+      color: @text-color;
+      font-weight: 500;
+      font-size: 15px;
+      user-select: none;
+      &.ant-tabs-tab-active {
+        .ant-tabs-tab-btn {
+          color: @primary-color-hover;
+        }
+      }
+    }
+    // .ant-tabs-ink-bar {
+    //   visibility: hidden;
+    // }
+    .ant-tabs-content-holder {
+      overflow-y: auto;
+    }
+    .ant-tabs-content {
+      padding: 16px 20px 0;
+    }
+
+    .result-text {
+      .ant-input {
+        font-size: 13px;
+        transition: none;
+      }
+    }
+
+    .result-json {
+      height: 100%;
+      padding: 10px 20px 0 20px;
+      overflow: auto;
+    }
+    .recognition-result-loading {
+      top: 52px;
+      bottom: 72px;
+    }
+  }
+}
+
+@import '../../../../style/react.json.view.less';

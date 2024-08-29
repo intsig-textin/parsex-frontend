@@ -1,0 +1,12 @@
+/lambda/
+/scripts
+/config
+.history
+public
+dist
+.umi
+mock
+assets
+src/pages/DashboardStudio/
+vendor
+assets

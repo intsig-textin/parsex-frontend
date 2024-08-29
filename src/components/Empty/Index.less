@@ -1,0 +1,29 @@
+.emptyWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  :global {
+    .ant-image {
+      margin-bottom: 16px;
+      &-img {
+        width: 100%;
+      }
+    }
+  }
+  .title {
+    margin-bottom: 4px;
+    color: @text-color;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .desc {
+    margin-bottom: 4px;
+    color: #868a9c;
+    font-size: 12px;
+    line-height: 20px;
+  }
+}

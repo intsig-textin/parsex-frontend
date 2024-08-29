@@ -1,0 +1,37 @@
+.question-tooltips.tooltips-line {
+  max-width: none;
+
+  :global {
+    .ant-tooltip-content {
+      background-color: transparent !important;
+    }
+    .ant-tooltip-inner {
+      min-height: 28px;
+      padding: 4px 12px;
+      color: #fff;
+      font-size: 12px;
+      line-height: 20px;
+      white-space: nowrap;
+      border-radius: 4px;
+      box-shadow: 0px 6px 12px 0px rgba(3, 10, 26, 0.1);
+    }
+  }
+}
+.hoverStyle {
+  position: relative;
+  img {
+    position: absolute;
+    top: 2px;
+  }
+}
+.tips-icon {
+  color: @text-gray-color;
+  cursor: pointer;
+
+  &:hover {
+    color: @primary-color;
+    img {
+      opacity: 0.8;
+    }
+  }
+}

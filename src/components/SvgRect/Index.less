@@ -1,0 +1,140 @@
+@fill-alpha: 0.05;
+@fill-active-alpha: 0.2;
+@stroke-alpha: 0.5;
+
+@paragraph-color: @primary-color;
+@stamp-color: #e5451e;
+@list-color: #5d2281;
+@image-color: #ed7b2b;
+@formula-color: #06bebb;
+@watermark-color: #6abe28;
+@table-color: #11a35f;
+// 页眉页脚
+@edge-color: #af3188;
+
+.svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible !important;
+  cursor: default;
+
+  &.over-range {
+    display: none;
+  }
+
+  polygon {
+    position: relative;
+    fill: transparent;
+    fill: rgba(@paragraph-color, @fill-alpha);
+    stroke: rgba(@paragraph-color, @stroke-alpha);
+    stroke-width: 1px;
+  }
+
+  :global {
+    .active {
+      fill: rgba(@paragraph-color, @fill-active-alpha);
+      stroke: @paragraph-color;
+      stroke-width: 2px;
+    }
+
+    .stamp {
+      fill: rgba(@stamp-color, @fill-alpha);
+      stroke: rgba(@stamp-color, @stroke-alpha);
+    }
+    .stamp.active {
+      fill: rgba(@stamp-color, @fill-active-alpha);
+      stroke: @stamp-color;
+    }
+
+    .list {
+      fill: rgba(@list-color, @fill-alpha);
+      stroke: rgba(@list-color, @stroke-alpha);
+    }
+    .list.active {
+      fill: rgba(@list-color, @fill-active-alpha);
+      stroke: @list-color;
+    }
+
+    .image {
+      fill: rgba(@image-color, @fill-alpha);
+      stroke: rgba(@image-color, @stroke-alpha);
+    }
+    .image.active {
+      fill: rgba(@image-color, @fill-active-alpha);
+      stroke: @image-color;
+    }
+
+    .formula {
+      fill: rgba(@formula-color, @fill-alpha);
+      stroke: rgba(@formula-color, @stroke-alpha);
+    }
+    .formula.active {
+      fill: rgba(@formula-color, @fill-active-alpha);
+      stroke: @formula-color;
+    }
+
+    .watermark {
+      fill: rgba(@watermark-color, @fill-alpha);
+      stroke: rgba(@watermark-color, @stroke-alpha);
+    }
+    .watermark.active {
+      fill: rgba(@watermark-color, @fill-active-alpha);
+      stroke: @watermark-color;
+    }
+
+    .table,
+    .editable {
+      fill: rgba(@table-color, @fill-alpha);
+      stroke: rgba(@table-color, @stroke-alpha);
+    }
+    .table.active,
+    .editable.active {
+      fill: rgba(@table-color, @fill-active-alpha);
+      stroke: @table-color;
+    }
+
+    .edge {
+      fill: rgba(@edge-color, @fill-alpha);
+      stroke: rgba(@edge-color, @stroke-alpha);
+    }
+    .edge.active {
+      fill: rgba(@edge-color, @fill-active-alpha);
+      stroke: @edge-color;
+    }
+
+    .catalog {
+      // box-shadow: 2px 2px 4px 0px #e6fffb, -2px -2px 4px 0px #ffffff;
+      visibility: hidden;
+      // fill: rgba(#00474f, 0.05);
+      // stroke: #00474f;
+
+      &.active:local {
+        transform-origin: center;
+        visibility: visible;
+        animation: catalogAnimate 0.5s linear;
+        transform-box: fill-box;
+
+        @keyframes catalogAnimate {
+          0% {
+            transform: scale(1.08);
+          }
+          25% {
+            transform: scale(0.95);
+          }
+          50% {
+            transform: scale(1.08);
+          }
+          75% {
+            transform: scale(0.95);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+      }
+    }
+  }
+}

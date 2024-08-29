@@ -1,0 +1,51 @@
+.leftBarMain {
+  flex: 1;
+  // margin-right: 10px;
+  overflow-y: auto;
+}
+
+.robotFileListContainer {
+  :global {
+    .ant-checkbox {
+      box-shadow: 0px 2px 4px 0px rgba(3, 10, 26, 0.2);
+    }
+    .ListContainer {
+      .ant-list {
+        padding: 0 20px;
+      }
+      .ant-pro-list-row {
+        position: relative;
+        &:hover {
+          background: none;
+        }
+      }
+      .ant-pro-list-row-selected {
+        background: none !important;
+      }
+      .ant-list-item,
+      .ant-pro-list-row,
+      .ant-pro-list-row-content {
+        margin: 0;
+        padding: 0;
+      }
+      .ant-pro-list-row-header {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        z-index: 10;
+      }
+      .ant-pro-list-row-content {
+        margin: 0;
+      }
+
+      .ant-list-footer {
+        padding: 30px 0;
+        color: rgba(58, 65, 92, 0.68);
+        text-align: center;
+      }
+      .ant-pro-list .ant-pro-list-row.ant-pro-list-row-selected {
+        background: none !important;
+      }
+    }
+  }
+}
