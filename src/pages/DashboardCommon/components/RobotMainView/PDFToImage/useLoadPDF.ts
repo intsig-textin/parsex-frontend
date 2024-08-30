@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { isIEBrowser } from '@/utils';
+import { isIEBrowser, prefixPath } from '@/utils';
 import useExternal from './useExternal';
 
 function useLoadPDF({ onLoad, onError }: { onLoad?: () => void; onError?: () => void } = {}) {
@@ -7,8 +7,8 @@ function useLoadPDF({ onLoad, onError }: { onLoad?: () => void; onError?: () => 
 
   const { dir, buildDir, cmapsURL, getParams } = useMemo(() => {
     const versionMap = {
-      new: 'https://static.textin.com/deps/pdfjs-dist@2.11.338',
-      old: 'https://static.textin.com/deps/pdfjs-dist@2.0.943',
+      new: `${prefixPath}pdfjs-dist@2.11.338`,
+      old: `${prefixPath}pdfjs-dist@2.0.943`,
     };
     const isOld = isIEBrowser || !document.body?.attachShadow;
     const dir = isOld ? versionMap.old : versionMap.new;

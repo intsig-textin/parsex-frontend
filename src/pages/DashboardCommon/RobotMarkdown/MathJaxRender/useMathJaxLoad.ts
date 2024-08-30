@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useEventListener } from 'ahooks';
 import useExternal from '../../components/RobotMainView/PDFToImage/useExternal';
+import { prefixPath } from '@/utils';
 
 export const useRefreshMath = (refresh: any) => {
   const refreshHandle = () => {
@@ -46,7 +47,7 @@ const useMathJaxLoad = ({ show }: { show: boolean }) => {
         },
       };
     }
-    setUrl('https://static.textin.com/deps/mathjax@3.2.2/es5/tex-mml-chtml.js');
+    setUrl(`${prefixPath}mathjax@3.2.2/es5/tex-mml-chtml.js`);
   }, [show]);
 };
 

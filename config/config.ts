@@ -43,16 +43,15 @@ export default defineConfig({
     loading: '@/pages/Loading',
   },
   dynamicImportSyntax: {},
-  headScripts: [{ src: `${prefixPath}classList.polyfill.min.js`, defer: true }],
+  headScripts: [
+    { src: `${prefixPath}classList.polyfill.min.js`, defer: true },
+    { src: `${prefixPath}xlsx.full.min.js`, defer: true },
+  ],
   externals: {
     // react: 'window.React',
     xlsx: 'XLSX',
   },
-
-  scripts: [
-    // 'https://static.textin.com/deps/react@17.0.2/react.production.min.js',
-    'https://static.textin.com/deps/xlsx@0.17.4/dist/xlsx.full.min.js',
-  ],
+  scripts: [],
   copy: ['./vendor/classList.polyfill.min.js'],
   cssLoader: {
     modules: {
