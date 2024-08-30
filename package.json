@@ -5,14 +5,10 @@
   "license": "MIT",
   "contributors": [
     {
-      "name": "Cong Guo",
-      "email": "15797730704@163.com",
-      "url": "https://github.com/intsig-textin/parsex-frontend.git"
+      "name": "Cong Guo"
     },
     {
-      "name": "Fuller Xu",
-      "email": "446952260@qq.com",
-      "url": "https://github.com/intsig-textin/parsex-frontend.git"
+      "name": "Fuller Xu"
     }
   ],
   "scripts": {

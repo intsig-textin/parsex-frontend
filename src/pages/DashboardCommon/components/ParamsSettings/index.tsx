@@ -16,7 +16,7 @@ const mdDefaultParams: Record<string, any> = {
   markdown_details: 1,
   table_flavor: 'html',
   get_image: 'objects',
-  parse_mode: 'auto',
+  parse_mode: 'scan',
   support_doc_parser: 1,
 };
 
