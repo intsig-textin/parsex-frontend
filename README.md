@@ -30,7 +30,7 @@
 7. **复制和导出markdown文件**
 8. **复制解析后的表格和图片**，可以直接粘贴到Excel表格中
 
-以上功能，都可以在 [TextIn.com](https://textin.com) 上体验使用，[👉 体验地址](https://www.textin.com/console/recognition/robot_markdown?service=pdf_to_markdownm)
+以上功能，都可以在 [TextIn.com](https://textin.com) 上体验使用，[👉 体验地址](https://www.textin.com/console/recognition/robot_markdown?service=pdf_to_markdown)
 
 ## 安装依赖
 
