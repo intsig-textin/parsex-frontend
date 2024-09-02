@@ -17,7 +17,7 @@ const mdDefaultParams: Record<string, any> = {
   table_flavor: 'html',
   get_image: 'objects',
   parse_mode: 'scan',
-  support_doc_parser: 1,
+  catalog_details: 1,
 };
 
 const paramsProps: Record<string, any> = {

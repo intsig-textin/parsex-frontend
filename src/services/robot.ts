@@ -245,8 +245,8 @@ export async function robotRecognize({
     param = { ...param, ...queryParams };
   }
 
-  if (!param.hasOwnProperty('support_doc_parser')) {
-    param.support_doc_parser = 1;
+  if (!param.hasOwnProperty('catalog_details')) {
+    param.catalog_details = 1;
   }
 
   const requestUrl = param.custom_api ? param.custom_api : '/robot/ocr_recognize';
