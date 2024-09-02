@@ -71,7 +71,7 @@ npm run start
 
 2. 如何获取`x-ti-app-id`, `x-ti-secret-code`
 
-请至 [Textin.com](https://textin.com) 免费注册账号后，在【工作台 - 账号管理 - 开发者信息】中查看
+在[此链接](https://www.textin.com/console/dashboard/setting)免费注册或登录账号后查看
 
 ## 脚本命令
 
