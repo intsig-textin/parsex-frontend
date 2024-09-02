@@ -43,10 +43,10 @@ const useList = () => {
         }
         // 兼容格式
         if (!res.data?.id) {
-          const data = res.data;
+          const data = res as any;
 
           // 兼容角度
-          if (!data.metrics) {
+          if (!data?.metrics) {
             const curSettings = getParamsSettings();
             data.dpi = curSettings.dpi || '144';
             data.metrics =
@@ -54,6 +54,10 @@ const useList = () => {
                 page_id: i + 1,
                 angle: o.angle || 0,
               })) || [];
+          } else {
+            data.result ??= {};
+            data.result.metrics = data.metrics;
+            data.result.dpi = data.metrics?.[0]?.dpi;
           }
 
           res.data = {
@@ -67,7 +71,7 @@ const useList = () => {
             img_name: params.imgName,
             img_uri: params.url,
             thumbnail: params.url,
-            result: data,
+            result: data.result,
           };
         }
         return res;

@@ -249,7 +249,7 @@ export async function robotRecognize({
     param.catalog_details = 1;
   }
 
-  const requestUrl = param.custom_api ? param.custom_api : '/robot/ocr_recognize';
+  const requestUrl = param.custom_api ? param.custom_api : '/ai/service/v1/pdf_to_markdown';
 
   return request<IRecognizeRes>(paramToString(param, requestUrl), {
     ...bodyOption,
