@@ -49,10 +49,11 @@ const useList = () => {
           if (!data.metrics) {
             const curSettings = getParamsSettings();
             data.dpi = curSettings.dpi || '144';
-            data.metrics = data.pages.map((o, i) => ({
-              page_id: i + 1,
-              angle: o.angle || 0,
-            }));
+            data.metrics =
+              data.pages?.map((o, i) => ({
+                page_id: i + 1,
+                angle: o.angle || 0,
+              })) || [];
           }
 
           res.data = {
