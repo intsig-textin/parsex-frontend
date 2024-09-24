@@ -20,7 +20,7 @@
     "start:ie": "cross-env UMI_UI=none UMI_ENV=cloud umi dev",
     "build:test": "cross-env NODE_OPTIONS=--max_old_space_size=4096 UMI_ENV=test umi build",
     "build:legacy": "set NODE_OPTIONS=--openssl-legacy-provider && cross-env UMI_ENV=test umi build",
-    "build": "cross-env UMI_ENV=cloud NODE_OPTIONS=--max_old_space_size=4096 umi build",
+    "build": "cross-env UMI_ENV=cloud NODE_OPTIONS=\"--max_old_space_size=4096 --openssl-legacy-provider\" umi build",
     "analyze": "cross-env ANALYZE=1 umi build",
     "postinstall": "umi generate tmp",
     "test": "umi-test",
