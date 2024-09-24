@@ -1,4 +1,4 @@
-import { useDispatch } from '@/.umi/plugin-dva/exports';
+import { useDispatch } from 'dva';
 import { useMount, useUnmount } from 'ahooks';
 import type { FC, ReactNode } from 'react';
 import GoBack from './GoBack';
