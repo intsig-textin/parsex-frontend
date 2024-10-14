@@ -36,3 +36,7 @@ export default ({ type, text }: IProps) => {
     </div>
   );
 };
+
+export const DotsLoading = () => {
+  return <span className={styles.dotsLoading} />;
+};

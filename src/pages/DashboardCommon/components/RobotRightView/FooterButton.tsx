@@ -3,6 +3,7 @@ import { Button, message, Space } from 'antd';
 import Icon from '@ant-design/icons';
 import md5 from 'md5';
 import type { IExportTypeItem } from '@/components/ExportModal/Index';
+import TextinToolTip from '@/components/TextinToolTip';
 import ExportModal from '@/components/ExportModal/Index';
 import { ReactComponent as DownloadIcon } from '@/assets/robot/btn-download.svg';
 import styles from './FooterButton.less';
@@ -16,6 +17,7 @@ const noop = () => {};
 interface IProps {
   disabled: boolean; // 是否可用
   type: string; // 批量或者单个
+  showEdit?: boolean; // 是否展示编辑按钮
   showCopy: boolean; // 是否展示复制按钮
   downloadData?: any; // 下载数据
   showFeedback?: boolean; // 是否展示问题反馈
@@ -28,10 +30,15 @@ interface IProps {
   externalExport?: any;
   currentFile?: any;
   currentTab?: string;
+  markdownMode?: 'view' | 'edit';
+  setMarkdownMode?: React.Dispatch<React.SetStateAction<'view' | 'edit'>>;
+  shouldSaveMarkdown?: boolean;
+  saveResultJson?: (silent?: boolean) => Promise<void>;
 }
 const FooterButton = ({
   disabled,
   type,
+  showEdit = false,
   showCopy,
   showFeedback = true,
   showSettings,
@@ -44,9 +51,28 @@ const FooterButton = ({
   externalExport,
   currentFile,
   currentTab,
+  markdownMode,
+  setMarkdownMode,
+  shouldSaveMarkdown,
+  saveResultJson,
 }: IProps) => {
   const [downLoading, setDownLoading] = useState(false);
   const [showExportModal, setShowExportModal] = useState<boolean>(false);
+
+  const [saveLoading, setSaveLoading] = useState(false);
+
+  const saveMarkdown = async () => {
+    setSaveLoading(true);
+    try {
+      if (shouldSaveMarkdown) {
+        // await saveResultJson?.(false);
+      }
+      setMarkdownMode?.('view');
+    } catch (error) {
+      console.log(error);
+    }
+    setSaveLoading(false);
+  };
 
   const onClickExportResult = async (key: string) => {};
 
@@ -61,6 +87,20 @@ const FooterButton = ({
         resultExport={onClickExportResult}
       />
       <Space size={12} className={styles.footer}>
+        {showEdit &&
+          (markdownMode === 'view' ? (
+            <Button style={{ width: 82 }} onClick={() => setMarkdownMode?.('edit')}>
+              编辑
+            </Button>
+          ) : (
+            <TextinToolTip
+              title={currentFile?.isExample ? '对示例样本的修改仅在当前页面显示，不会永久保存' : ''}
+            >
+              <Button type="primary" onClick={saveMarkdown} loading={saveLoading}>
+                完成编辑
+              </Button>
+            </TextinToolTip>
+          ))}
         {showSettings && <ParamsSettings />}
 
         {showCopy && (

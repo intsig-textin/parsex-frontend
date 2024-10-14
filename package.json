@@ -98,6 +98,7 @@
     "umi-types": "^0.5.14",
     "unstated-next": "^1.1.0",
     "utif": "^3.1.0",
+    "vditor": "^3.10.6",
     "webpack": "^5.37.1",
     "yorkie": "^2.0.0"
   },

@@ -43,9 +43,6 @@ const RobotHeader = (props: IProps) => {
     showAPI = true,
     showPrice = true,
   } = props;
-  const {
-    query: { robotType, service: robot_service },
-  } = useLocation() as any;
 
   const documentVisibility = useDocumentVisibility();
 
@@ -55,9 +52,7 @@ const RobotHeader = (props: IProps) => {
   useEffect(() => {
     const { name } = props.Robot.info;
 
-    if (name) {
-      document.title = `TextIn - ${name}`;
-    }
+    document.title = `TextIn - ParseX`;
   }, [name]);
 
   useEffect(() => {}, [service, documentVisibility]);
@@ -80,7 +75,7 @@ const RobotHeader = (props: IProps) => {
 
   return (
     <div className={styles.wrapper}>
-      <span className={styles.text}>{name}</span>
+      {/* <span className={styles.text}>{name}</span> */}
       {showAPI && (
         <span
           className={styles.apiText}

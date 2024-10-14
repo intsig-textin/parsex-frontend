@@ -15556,6 +15556,13 @@ value-equal@^1.0.1:
   resolved "https://registry.npmmirror.com/value-equal/download/value-equal-1.0.1.tgz#1e0b794c734c5c0cade179c437d356d931a34d6c"
   integrity sha1-Hgt5THNMXAyt4XnEN9NW2TGjTWw=
 
+vditor@^3.10.6:
+  version "3.10.6"
+  resolved "https://registry.npmmirror.com/vditor/-/vditor-3.10.6.tgz#527b59d55371c5df0e6e3561ead7d0a32423653e"
+  integrity sha512-W4wsC+VufmoXQn6RJ1MM9/1BQzx+tqeFpmxJiIp6j696LdsxQAXhmIUzd61A/Jp83MDEFdfUZlL43cyDAyXQag==
+  dependencies:
+    diff-match-patch "^1.0.5"
+
 verror@1.10.0:
   version "1.10.0"
   resolved "https://registry.npmmirror.com/verror/download/verror-1.10.0.tgz#3a105ca17053af55d6e270c1f8288682e18da400"

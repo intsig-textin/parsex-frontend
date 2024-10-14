@@ -13,6 +13,7 @@ interface IProps {
   onTabChange?: (type: ResultType) => void;
   resultJson: any;
   service: string;
+  disableEdit?: boolean;
 }
 
 export const RobotRightView: FC<IProps> = ({
@@ -25,6 +26,7 @@ export const RobotRightView: FC<IProps> = ({
   resultJson,
   service,
   markdown,
+  disableEdit,
 }) => {
   return (
     <RightView
@@ -43,6 +45,7 @@ export const RobotRightView: FC<IProps> = ({
               markdown,
             }}
             showCopy={[ResultType.md, ResultType.json].includes(currentTab)}
+            showEdit={[ResultType.md].includes(currentTab) && resultJson?.markdown && !disableEdit}
           />
         );
       }}

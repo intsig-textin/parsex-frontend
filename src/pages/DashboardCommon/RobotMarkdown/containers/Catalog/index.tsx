@@ -8,7 +8,17 @@ import { genTableContentTreeList, scrollIntoActiveCatalog } from './utils';
 import styles from './index.less';
 
 const Catalog = ({ data: catalog }: { data: any }) => {
-  const data = catalog?.generate;
+  const data = useMemo(() => {
+    if (Array.isArray(catalog?.toc)) {
+      return catalog.toc.map((item: any) => ({
+        ...item,
+        level: item.hierarchy,
+        content: item.title,
+        pageNum: item.page_id - 1,
+      }));
+    }
+    return catalog?.generate;
+  }, [catalog]);
 
   const { collapsed } = useUploadFormat.useContainer();
 

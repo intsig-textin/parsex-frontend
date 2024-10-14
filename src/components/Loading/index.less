@@ -32,3 +32,28 @@
     height: 16px;
   }
 }
+
+.dotsLoading::after {
+  display: inline-block;
+  width: 1em;
+  text-align: left;
+  animation: dots 1.2s steps(3, end) infinite;
+  content: '';
+}
+
+@keyframes dots {
+  0%,
+  10% {
+    content: '';
+  }
+  20% {
+    content: '.';
+  }
+  60% {
+    content: '..';
+  }
+  80%,
+  100% {
+    content: '...';
+  }
+}

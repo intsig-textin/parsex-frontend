@@ -8,12 +8,16 @@ const useAfterLoad = (data?: IRectItem[][]) => {
   useEffect(() => {
     if (isImg && Array.isArray(data) && data[0] && setRectList) {
       setRectList(
-        data[0].map((item: IRectItem) => ({
-          uid: item.content_id,
-          points: item.position,
-          type: item.type,
-          angle: item.angle || 0,
-        })),
+        data[0]
+          .map((item: IRectItem, i) => ({
+            uid: item.content_id,
+            points: item.position,
+            type: item.type,
+            angle: item.angle || 0,
+            renderText: item.render_text,
+            sort: ['category'].includes(item.type as string) ? i - 10000 : i,
+          }))
+          .sort((a, b) => a.sort - b.sort),
       );
     } else {
       setRectList([]);

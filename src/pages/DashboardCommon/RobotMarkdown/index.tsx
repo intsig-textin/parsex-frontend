@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { message } from 'antd';
 import { parse } from 'querystring';
-import { connect, useParams, useSelector } from 'umi';
+import { connect } from 'umi';
 import type { IFileItem } from '../RobotStruct/data';
 import { robotRecognize, robotRecognizeHistory } from '@/services/robot';
 import LeftView from '../RobotStruct/containers/LeftView/Index';
@@ -16,16 +16,12 @@ import type { ConnectState, IRobotModelState } from '@/models/connect';
 import { RobotLayout, RobotHeader } from '../components';
 import { MultiPageMarkdown } from './MarkdownRender';
 import { formatResult } from './utils';
-import type { Dispatch } from 'umi';
-import { AppIdAndSecretPosition } from '../components/ParamsSettings';
 
 interface PageProps {
   Robot: IRobotModelState;
-  dispatch: Dispatch;
 }
 const MarkdownPage: FC<PageProps> = (props) => {
   const {
-    dispatch,
     Robot: { info },
   } = props;
   // 当前选中的列表
@@ -35,19 +31,18 @@ const MarkdownPage: FC<PageProps> = (props) => {
   const [refreshAutoCollapsed, setRefreshAutoCollapsed] = useState<any>();
   const [dataType, setDataType] = useState<ResultType>(ResultType.md);
 
-  const { service } = useSelector(
-    (states: ConnectState) => states.Robot.info as { service: string },
-  );
-  const { currentFile, setCurrentFile, setResultJson, resultJson } = storeContainer.useContainer();
-
-  useEffect(() => {
-    dispatch({
-      type: 'Robot/getRobotInfo',
-      payload: {
-        service: 'pdf_to_markdown',
-      },
-    });
-  }, []);
+  const { service } = parse(window.location.search.slice(1));
+  const {
+    currentFile,
+    setCurrentFile,
+    setResultJson,
+    resultJson,
+    markdownMode,
+    showModifiedMarkdown,
+    updateResultJson,
+    markdownEditorRef,
+    saveResultJson,
+  } = storeContainer.useContainer();
 
   useEffect(() => {
     if (currentFile && currentFile.status === 'complete') {
@@ -56,6 +51,17 @@ const MarkdownPage: FC<PageProps> = (props) => {
       setRefreshAutoCollapsed(false);
     }
   }, [currentFile]);
+
+  useEffect(() => {
+    if (resultJson?.detail_new) {
+      setCurrentFile((pre) => {
+        return {
+          ...pre,
+          newRects: formatResult({ ...pre.originResult, detail: resultJson?.detail_new }, dataType),
+        };
+      });
+    }
+  }, [resultJson?.detail_new, dataType]);
 
   // 单击左侧样本的回调
   const onFileClick = (current: Partial<IFileItem>) => {
@@ -67,20 +73,20 @@ const MarkdownPage: FC<PageProps> = (props) => {
     setCurrentFile({ ...current, status: 'upload' });
     // 识别样例
     if (isExample) {
-      console.log('current.name', current);
-      import(`@/demo/files/${current.id}.json`)
+      robotRecognize({
+        id: current.id as any,
+        exampleFlag: isExample,
+        imgName: current.name,
+        service: service as string,
+      })
         .then((res) => {
-          console.log('res', res);
-          setTimeout(() => {
-            // 处理回调
-            handleResult(res, 'example');
-          }, 2000);
+          // 处理回调
+          handleResult(res, 'example');
         })
-        .catch((e) => {
-          console.log('e', e);
+        .catch(() => {
           setCurrentFile({ ...current, status: 'wait' });
         });
-    } else {
+    } else if (current.id) {
       // 获取历史识别结果
       robotRecognizeHistory(current.id as number)
         .then((res) => {
@@ -97,11 +103,7 @@ const MarkdownPage: FC<PageProps> = (props) => {
       // @TODO:未做异常处理
       if (result.code !== 200) {
         message.destroy();
-        let resMsg = result.msg || result.message;
-        if (result.code === 40101) {
-          resMsg = resMsg += `，${AppIdAndSecretPosition}`;
-        }
-        message.error(resMsg);
+        message.error(result.msg || result.message);
         // 更新store
         setCurrentFile({ ...current, status: 'wait' });
         return;
@@ -122,8 +124,10 @@ const MarkdownPage: FC<PageProps> = (props) => {
         cloudStatus: type === 'data' ? current.cloudStatus : 0,
         originResult: result.data.result,
         rects: formatResult(result.data.result, dataType),
+        newRects:
+          result.data.result?.detail_new &&
+          formatResult({ ...result.data.result, detail: result.data.result?.detail_new }, dataType),
         dpi: result.data.result?.dpi || 72,
-        ctime: Date.now().valueOf().toString().slice(0, 10),
       });
     };
   };
@@ -144,6 +148,9 @@ const MarkdownPage: FC<PageProps> = (props) => {
         return {
           ...pre,
           rects: formatResult(pre.originResult, type),
+          newRects:
+            pre.originResult?.detail_new &&
+            formatResult({ ...pre.originResult, detail: pre.originResult?.detail_new }, type),
         };
       }
       return pre;
@@ -154,7 +161,19 @@ const MarkdownPage: FC<PageProps> = (props) => {
 
   return (
     <div className={styles.strutContainer}>
-      <RobotHeader />
+      <RobotHeader
+        extra={
+          <span className={styles.apiText}>
+            <span>热点指南：</span>
+            <a
+              href="https://qw01obudp42.feishu.cn/docx/Bt6ZdIW2PohoNuxgsmNcWzyVn8d"
+              target="_blank"
+            >
+              前端与SDK集成攻略
+            </a>
+          </span>
+        }
+      />
       <RobotLayout
         leftView={
           <LeftView
@@ -187,12 +206,23 @@ const MarkdownPage: FC<PageProps> = (props) => {
             titleName={info.name as string}
             service={curService}
             markdown
+            disableEdit={resultJson?.detail_new && !showModifiedMarkdown}
           >
-            <MultiPageMarkdown
-              data={currentFile?.rects || resultJson?.markdown}
-              dpi={currentFile?.dpi}
-              dataType={dataType}
-            />
+            {
+              <MultiPageMarkdown
+                markdown={resultJson?.markdown}
+                data={
+                  (showModifiedMarkdown ? currentFile?.newRects : currentFile?.rects) ||
+                  resultJson?.markdown
+                }
+                dpi={currentFile?.dpi}
+                dataType={dataType}
+                markdownMode={markdownMode}
+                onMarkdownChange={updateResultJson}
+                markdownEditorRef={markdownEditorRef}
+                onSave={saveResultJson}
+              />
+            }
           </RobotRightView>
         }
       />

@@ -10,6 +10,7 @@ import { textinDomain } from '@/utils/helper';
 // import { gatConfigService, SaveConfigService } from '../../RobotMarkdown/service';
 
 const mdDefaultParams: Record<string, any> = {
+  custom_api: "https://api.textin.com/ai/service/v1/pdf_to_markdown",
   dpi: 144,
   page_count: 1000,
   apply_document_tree: 1,

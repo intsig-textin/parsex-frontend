@@ -14,7 +14,7 @@ const RobotTableLayout = ({ children, dispatch }: { children: ReactNode; dispatc
           logo={
             <LogoCompose
               onClick={() => {
-                history.push('/dashboard/overview');
+                // history.push('/dashboard/overview');
               }}
             />
           }

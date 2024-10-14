@@ -93,6 +93,14 @@ export const request = extend({
 });
 export default request;
 
+export const requestWidthCache = extend({
+  errorHandler,
+  credentials: 'same-origin',
+  mode: 'cors',
+  headers: { 'Cache-Control': 'max-age=31536000', pragma: 'max-age=31536000' },
+  prefix: getTextinPrefix(),
+});
+
 // 拦截器
 request.interceptors.request.use((url, options: any) => {
   if (options.deleteToken) delete options.headers.token;

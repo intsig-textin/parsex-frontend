@@ -61,7 +61,7 @@ interface IRobotModel {
 const initialInfo = {
   id: 0,
   name: '',
-  service: '',
+  service: 'pdf_to_markdown',
   guid: undefined,
   image: '',
   description: '',
