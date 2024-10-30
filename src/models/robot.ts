@@ -62,6 +62,7 @@ const initialInfo = {
   id: 0,
   name: '',
   service: 'pdf_to_markdown',
+  interaction: 16,
   guid: undefined,
   image: '',
   description: '',
