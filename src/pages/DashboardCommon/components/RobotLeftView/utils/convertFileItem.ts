@@ -9,11 +9,11 @@ const DEFAULT_PDF__URL = `${imageUrl}?filename=170abe38-a3e8-11eb-9fcf-525400a06
 
 export const convertFileItem = ({ ocr_status = 1, ...item }: IListItem): IFileItem => {
   let img_name = item.img_name;
-  if (item.img_name.length >= 64) {
-    // img_name超长时会被截取，后缀缺失，取img_uri中的后缀
-    const suffix = /\.[a-zA-z]+$/.test(item.img_uri) ? '.' + item.img_uri.split('.').pop() : '';
-    img_name = item.img_name.replace(/(\.[a-zA-z]*)?$/, suffix);
-  }
+  // if (item.img_name.length >= 64) {
+  //   // img_name超长时会被截取，后缀缺失，取img_uri中的后缀
+  //   const suffix = /\.[a-zA-z]+$/.test(item.img_uri) ? '.' + item.img_uri.split('.').pop() : '';
+  //   img_name = item.img_name.replace(/(\.[a-zA-z]*)?$/, suffix);
+  // }
   return {
     id: item.id,
     name: img_name,
