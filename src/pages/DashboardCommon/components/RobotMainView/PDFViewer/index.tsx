@@ -90,6 +90,11 @@ function PDFViewer({
     if (currentFile?.url) {
       timeoutRef.current = setTimeout(() => {
         onLoad?.({});
+        const info = {
+          name: 'pdf.js错误',
+          keyword: 'pdf_viewer加载超时',
+        };
+        console.log(info);
       }, 1000 * 2);
     }
   }, [currentFile?.url]);
@@ -97,6 +102,16 @@ function PDFViewer({
   useEffect(() => {
     if ([viewerCss, viewer, sandbox].includes('error')) {
       onError?.({});
+      const info = {
+        name: 'pdf.js错误',
+        keyword: 'pdf_viewer加载失败',
+        message: {
+          'pdf_viewer.css': viewerCss,
+          'pdf_viewer.js': viewer,
+          'pdf.sandbox.js': sandbox,
+        },
+      };
+      console.log(info);
     }
   }, [viewerCss, viewer, sandbox]);
 
@@ -126,6 +141,12 @@ function PDFViewer({
           message.error('文件预览失败');
           console.log('pdf预览失败', error);
         }
+        const info = {
+          name: 'pdf.js错误',
+          keyword: 'pdf_viewer渲染出错',
+          message: error,
+        };
+        console.log(info);
       });
     }
   }, [viewerCss, viewer, sandbox, pdfLoad]);
