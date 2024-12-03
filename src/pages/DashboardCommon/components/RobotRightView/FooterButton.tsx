@@ -26,7 +26,7 @@ interface IProps {
   robotName?: string; // 机器人名称
   exportTypes: IExportTypeItem[]; // 导出类型
   onCopyResult?: () => void;
-  onExport?: () => void;
+  onExport?: (key?: string) => void;
   externalExport?: any;
   currentFile?: any;
   currentTab?: string;
@@ -74,7 +74,15 @@ const FooterButton = ({
     setSaveLoading(false);
   };
 
-  const onClickExportResult = async (key: string) => {};
+  const onClickExportResult = async (key: string) => {
+    setShowExportModal(false);
+    setDownLoading(true);
+    if (externalExport) {
+      await externalExport(key);
+      setDownLoading(false);
+      return;
+    }
+  };
 
   return (
     <>
