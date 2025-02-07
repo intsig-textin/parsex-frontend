@@ -1,9 +1,8 @@
 import { defineConfig } from 'umi';
 import theme from '../src/utils/theme';
 import defaultSettings from './defaultSettings';
-import MonacoWebpackPlugin from 'monaco-editor-webpack-plugin';
 import { prefixPath } from '../src/utils/env';
-import path from 'path';
+
 const { NODE_ENV } = process.env;
 
 /**
@@ -16,6 +15,7 @@ export default defineConfig({
   define: {
     env: NODE_ENV,
   },
+  webpack5: {},
   hash: true,
   locale: false,
   base: prefixPath,
@@ -43,14 +43,8 @@ export default defineConfig({
     loading: '@/pages/Loading',
   },
   dynamicImportSyntax: {},
-  headScripts: [
-    { src: `${prefixPath}classList.polyfill.min.js`, defer: true },
-    { src: `${prefixPath}xlsx.full.min.js`, defer: true },
-  ],
-  externals: {
-    // react: 'window.React',
-    xlsx: 'XLSX',
-  },
+  headScripts: [{ src: `${prefixPath}classList.polyfill.min.js`, defer: true }],
+  externals: {},
   scripts: [],
   copy: ['./vendor/classList.polyfill.min.js'],
   cssLoader: {
@@ -101,7 +95,6 @@ export default defineConfig({
   },
   //["module-resolver", { root:["./"] ,"alias": { "@": path.resolve(__dirname,"../src") } }],
   // extraBabelPlugins:[['inline-react-svg',{}],["module-resolver", { root:["../"] ,"alias": { "@": "./src" } }]],
-  extraBabelIncludes: [path.join(__dirname, './node_modules/exif-rotate-js/lib')],
   chunks: ['vendors', 'umi'],
   chainWebpack(config) {
     config.merge({
@@ -117,29 +110,6 @@ export default defineConfig({
         },
       },
     });
-    // config.resolve.alias.set('monaco-editor', 'monaco-editor/esm/vs/editor/editor.api.js')
-    config.plugin('monaco-editor').use(MonacoWebpackPlugin, [
-      {
-        languages: [
-          'javascript',
-          'python',
-          'html',
-          'java',
-          'lua',
-          'php',
-          'cpp',
-          'csharp',
-          'shell',
-          'go',
-        ],
-      },
-    ]);
-    config.module
-      .rule('xlsx')
-      .test(/\.(xlsx)$/)
-      .use('file-loader')
-      .loader('file-loader')
-      .end();
   },
   // esbuild is father build tools
   // https://umijs.org/plugins/plugin-esbuild

@@ -1,0 +1,26 @@
+.guide-steps-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  box-sizing: content-box;
+  border-style: solid;
+  transition: all 0.2s ease-in-out;
+}
+:global {
+  .guide_tooltips {
+    max-width: initial;
+    .ant-tooltip-inner {
+      padding: 16px;
+      background-color: #fff;
+      border-radius: 4px;
+    }
+    .ant-tooltip-arrow {
+      .ant-tooltip-arrow-content {
+        width: 10px;
+        height: 10px;
+        background-color: #fff;
+      }
+    }
+  }
+}

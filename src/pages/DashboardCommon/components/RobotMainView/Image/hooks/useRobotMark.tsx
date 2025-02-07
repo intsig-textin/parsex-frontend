@@ -44,7 +44,7 @@ export default function useMarkTool(
       isClear.current = true;
       clearList();
     }
-  }, [imgWrapSize]);
+  }, [imgWrapSize, angle]);
 
   // 有旋转角度时,监听旋转结束后更新蒙层位置
   useEventListener(
@@ -57,7 +57,7 @@ export default function useMarkTool(
         }
       }
     },
-    { target: imgRef },
+    { target: imgRef.current || undefined },
   );
 
   function updateMark() {
@@ -70,7 +70,7 @@ export default function useMarkTool(
       height,
     };
     // 旋转角度 width <=> height 补位
-    if (angleFix && angle) {
+    if (angleFix && angle && [90, 270].includes(angle)) {
       const diff = (width - height) / 2;
       currentStyle = {
         width: height,

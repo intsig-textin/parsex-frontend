@@ -1,21 +1,30 @@
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
-import { message } from 'antd';
+import { Carousel, message, Row } from 'antd';
 import { parse } from 'querystring';
 import { connect } from 'umi';
-import type { IFileItem } from '../RobotStruct/data';
-import { robotRecognize, robotRecognizeHistory } from '@/services/robot';
-import LeftView from '../RobotStruct/containers/LeftView/Index';
-import MainView from '../RobotStruct/containers/MainView/Index';
+import lodash from 'lodash';
+import type { IFileItem } from './data';
+import {
+  downloadOcrImg,
+  imagePreview,
+  mdNoPreview,
+  robotRecognize,
+  robotRecognizeHistory,
+} from '@/services/robot';
+import LeftView from '../components/RobotLeftView/Index';
+import MainView from './containers/MainView/Index';
 import RobotRightView from './containers/RightView';
 import { ResultType } from './containers/RightView/RightView';
 import Catalog from './containers/Catalog';
-import styles from '../RobotStruct/Index.less';
-import { storeContainer } from '../RobotStruct/store';
+import styles from './index.less';
+import { storeContainer } from './store';
 import type { ConnectState, IRobotModelState } from '@/models/connect';
 import { RobotLayout, RobotHeader } from '../components';
 import { MultiPageMarkdown } from './MarkdownRender';
 import { formatResult } from './utils';
+import { base64ToURL, getFileNameAndType } from '@/utils';
+import { QuestionToolTips } from '@/components';
 
 interface PageProps {
   Robot: IRobotModelState;
@@ -46,7 +55,7 @@ const MarkdownPage: FC<PageProps> = (props) => {
 
   useEffect(() => {
     if (currentFile && currentFile.status === 'complete') {
-      setRefreshAutoCollapsed(currentFile.id);
+      // setRefreshAutoCollapsed(currentFile.id);
     } else {
       setRefreshAutoCollapsed(false);
     }
@@ -57,7 +66,9 @@ const MarkdownPage: FC<PageProps> = (props) => {
       setCurrentFile((pre) => {
         return {
           ...pre,
-          newRects: formatResult({ ...pre.originResult, detail: resultJson?.detail_new }, dataType),
+          newRects: formatResult({ ...pre.result, detail: resultJson?.detail_new }, dataType, {
+            angle: !pre.ignoreAngle,
+          }),
         };
       });
     }
@@ -85,7 +96,8 @@ const MarkdownPage: FC<PageProps> = (props) => {
         })
         .catch(() => {
           setCurrentFile({ ...current, status: 'wait' });
-        });
+        })
+        .finally(() => {});
     } else if (current.id) {
       // 获取历史识别结果
       robotRecognizeHistory(current.id as number)
@@ -95,11 +107,12 @@ const MarkdownPage: FC<PageProps> = (props) => {
         })
         .catch(() => {
           setCurrentFile({ ...current, status: 'wait' });
-        });
+        })
+        .finally(() => {});
     }
 
     // 处理接口返回的结果
-    const handleResult = (result: any, type: 'example' | 'data') => {
+    const handleResult = async (result: any, type: 'example' | 'data') => {
       // @TODO:未做异常处理
       if (result.code !== 200) {
         message.destroy();
@@ -108,34 +121,110 @@ const MarkdownPage: FC<PageProps> = (props) => {
         setCurrentFile({ ...current, status: 'wait' });
         return;
       }
-      if (result.data.result) {
-        const resultData = result.data.result;
+      const resultData = result.data.result;
+      // 更新json识别结果
+      setResultJson(resultData);
 
-        // 更新json识别结果
-        setResultJson(resultData);
+      const { count_status } = result.data;
+      const isEmptyData = ['{}', '[]'].includes(JSON.stringify(resultData));
+      if (isEmptyData) {
+        message.warning('无识别结果');
       }
-
-      const { count_status, ocr_status = 1 } = result.data;
+      const curFileData = lodash.omit(current, [
+        'showToggle',
+        'canToggle',
+        'hiddenRects',
+        'preview_url',
+        'scrollIntoView',
+      ]);
+      const filename = current.name || '';
+      const noPreviewType = /\.[a-z]+$/i.test(filename) && mdNoPreview(filename);
+      const isImage = current.isExample ? !current.isPDF : imagePreview(filename);
+      const isCropRemove =
+        String(resultData.remove_watermark) === '1' || String(resultData.crop_enhance) === '1';
+      const previewByRes =
+        isCropRemove &&
+        resultData.pages?.[0] &&
+        (resultData.pages[0].image_id || resultData.pages[0].base64);
+      let ignoreAngle; // base64图片是转正的图忽略角度
+      if (previewByRes && isImage) {
+        const image_id = resultData.pages[0].image_id;
+        const preview_url = { origin: current.url, result: '' };
+        if (image_id) {
+          const { data, code } = await downloadOcrImg(image_id);
+          if (code === 200) {
+            preview_url.result = 'data:image/jpeg;base64,' + data.image;
+          }
+        } else {
+          preview_url.result = 'data:image/jpeg;base64,' + resultData.pages[0].base64;
+          ignoreAngle = true;
+        }
+        preview_url.result = base64ToURL(preview_url.result);
+        curFileData.url = preview_url.result;
+        curFileData.preview_url = preview_url;
+      }
+      // 重新识别
+      if (current.t && currentFile?.id === current.id && currentFile.preview_url) {
+        if (curFileData.preview_url) {
+          curFileData.preview_url.origin = currentFile.preview_url.origin;
+        } else {
+          curFileData.url = currentFile.preview_url.origin;
+        }
+      }
+      if (isCropRemove) {
+        Object.assign(curFileData, {
+          showToggle: true,
+          canToggle: !noPreviewType,
+          hiddenRects: false,
+        });
+      }
+      let { type: fileType } = getFileNameAndType(filename);
+      if (fileType.includes('doc')) {
+        fileType = 'Word';
+      } else if (fileType.includes('htm')) {
+        fileType = 'HTML';
+      } else if (fileType.includes('pdf')) {
+        fileType = 'PDF';
+      } else {
+        fileType = '图片';
+      }
+      curFileData.fileType = fileType;
+      const parserPages =
+        ((!isImage && previewByRes) || noPreviewType) &&
+        Array.isArray(resultData?.pages) &&
+        resultData?.pages.map((item: any) => {
+          const row: Record<string, any> = {
+            ...lodash.pick(item, ['width', 'height', 'image_id']),
+            index: item.page_id,
+          };
+          if (item.image_id) {
+            row.fixedRotate = item.angle ? 360 - item.angle : item.angle;
+          } else if (!item.image_id && item.base64) {
+            row.image = { base64: item.base64 };
+            ignoreAngle = true;
+          }
+          return row;
+        });
       setCurrentFile({
-        ...current,
+        ...curFileData,
+        ignoreAngle,
         countStatus: count_status,
-        status: ocr_status === 1 ? 'complete' : 'wait',
+        status: isEmptyData ? 'wait' : 'complete',
         imageData: type === 'data' ? '' : current.imageData,
         cloudStatus: type === 'data' ? current.cloudStatus : 0,
-        originResult: result.data.result,
-        rects: formatResult(result.data.result, dataType),
+        result: resultData,
+        rects: formatResult(resultData, dataType, { angle: !ignoreAngle }),
         newRects:
-          result.data.result?.detail_new &&
-          formatResult({ ...result.data.result, detail: result.data.result?.detail_new }, dataType),
-        dpi: result.data.result?.dpi || 72,
+          resultData?.detail_new &&
+          formatResult({ ...resultData, detail: resultData?.detail_new }, dataType, {
+            angle: !ignoreAngle,
+          }),
+        dpi: resultData?.dpi || 72,
+        parserPages,
       });
     };
   };
 
-  // 获取当前选择的list
-  const getChooseList = (list: any) => {
-    setCurrentChoosenList(list);
-  };
   // 处理上传
   const handleUpload = (files: any) => {
     setFileList(files);
@@ -144,57 +233,127 @@ const MarkdownPage: FC<PageProps> = (props) => {
   const onTabChange = (type: ResultType) => {
     setDataType(type);
     setCurrentFile((pre) => {
-      if (pre.originResult) {
+      if (pre.result) {
         return {
           ...pre,
-          rects: formatResult(pre.originResult, type),
+          rects: formatResult(pre.result, type, { angle: !pre.ignoreAngle }),
           newRects:
-            pre.originResult?.detail_new &&
-            formatResult({ ...pre.originResult, detail: pre.originResult?.detail_new }, type),
+            pre.result?.detail_new &&
+            formatResult({ ...pre.result, detail: pre.result?.detail_new }, type, {
+              angle: !pre.ignoreAngle,
+            }),
         };
       }
       return pre;
     });
   };
 
+  const onToggleView = (val?: boolean) => {
+    setCurrentFile((pre) => {
+      if (pre.canToggle) {
+        const type = typeof val === 'boolean' ? val : !pre.hiddenRects;
+        if (pre.preview_url) {
+          pre.url = type ? pre.preview_url.origin : pre.preview_url.result;
+        } else {
+          if (pre.parserPages) {
+            pre.parserPagesRes = pre.parserPages;
+            pre.parserPages = undefined;
+          } else {
+            pre.parserPages = pre.parserPagesRes;
+          }
+        }
+        return {
+          ...pre,
+          hiddenRects: type,
+          scrollIntoView: true,
+        };
+      }
+      return pre;
+    });
+  };
+
+  const onToggleClick = () => {
+    onToggleView(!currentFile.hiddenRects);
+  };
+
+  const onContentClick = () => {
+    if (currentFile && currentFile.canToggle && currentFile.hiddenRects) {
+      onToggleView(false);
+    }
+  };
+
   const curService = service as string;
 
   return (
-    <div className={styles.strutContainer}>
+    <div className={styles.wrapper}>
       <RobotHeader
         extra={
-          <span className={styles.apiText}>
+          <Row className={styles.apiText} align="middle">
             <span>热点指南：</span>
-            <a
-              href="https://qw01obudp42.feishu.cn/docx/Bt6ZdIW2PohoNuxgsmNcWzyVn8d"
-              target="_blank"
+            <Carousel
+              style={{ width: 126, whiteSpace: 'nowrap' }}
+              dotPosition="right"
+              dots={false}
+              autoplay
+              autoplaySpeed={5000}
             >
-              前端与SDK集成攻略
-            </a>
-          </span>
+              <a
+                href="https://qw01obudp42.feishu.cn/docx/Bt6ZdIW2PohoNuxgsmNcWzyVn8d"
+                target="_blank"
+              >
+                前端与SDK集成攻略
+              </a>
+              <a
+                href="https://qw01obudp42.feishu.cn/docx/GmEGdWTb8ozSdkxUiSgcPQi6nJH"
+                target="_blank"
+              >
+                文档解析必备Tips
+              </a>
+            </Carousel>
+          </Row>
         }
       />
       <RobotLayout
         leftView={
           <LeftView
             currentFile={currentFile}
-            getChooseList={getChooseList}
-            onFileClick={onFileClick}
+            // getChooseList={getChooseList}
+            onFileClick={onFileClick as any}
             addFileList={fileList}
+            showSettings={true}
           />
         }
         showCollapsed
         autoCollapsed={refreshAutoCollapsed}
+        catalogView={<Catalog data={currentFile?.result?.catalog} />}
         mainView={
           <>
-            <Catalog data={currentFile?.originResult?.catalog} />
             <MainView
               currentFile={currentFile as any}
               onUpload={handleUpload}
+              docConvertToPDF={false}
               showText={false}
               autoLink
               angleFix
             />
+            {currentFile?.showToggle && (
+              <div className={styles.toggleView}>
+                <QuestionToolTips
+                  title={`暂不支持${currentFile.fileType}格式`}
+                  visible={currentFile?.canToggle ? false : undefined}
+                  placement="top"
+                  arrowPointAtCenter={false}
+                  defaultPopupContainer
+                >
+                  <a
+                    // className={classNames({ [styles.disabledClick]: currentFile.hiddenRects })}
+                    onClick={onToggleClick}
+                  >
+                    {currentFile.hiddenRects ? '查看结果' : '查看原图'}
+                  </a>
+                </QuestionToolTips>
+              </div>
+            )}
           </>
         }
         rightView={
@@ -211,16 +370,14 @@ const MarkdownPage: FC<PageProps> = (props) => {
             {
               <MultiPageMarkdown
                 markdown={resultJson?.markdown}
-                data={
-                  (showModifiedMarkdown ? currentFile?.newRects : currentFile?.rects) ||
-                  resultJson?.markdown
-                }
+                data={showModifiedMarkdown ? currentFile?.newRects : currentFile?.rects}
                 dpi={currentFile?.dpi}
                 dataType={dataType}
                 markdownMode={markdownMode}
                 onMarkdownChange={updateResultJson}
                 markdownEditorRef={markdownEditorRef}
                 onSave={saveResultJson}
+                onContentClick={onContentClick}
               />
             }
           </RobotRightView>

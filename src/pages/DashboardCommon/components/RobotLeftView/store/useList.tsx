@@ -1,24 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import { createContainer } from 'unstated-next';
-import { useRequest } from 'ahooks';
+import { useRequest, useUpdateLayoutEffect } from 'ahooks';
 import { message } from 'antd';
 import { useSelector } from 'umi';
 import type { IFileItem } from '../data';
 import { ReactComponent as WaringCircle } from '@/assets/icon/dashbord/warning.svg';
 import { convertFileItem } from '../utils/convertFileItem';
-import { robotRecognize } from '@/services/robot';
+import { mdNoPreview, robotRecognize } from '@/services/robot';
 import { COUNT_STATUS_LIST } from '../constants';
 import { generateUUID, messageByCode, notSupportPreView } from '@/utils';
 import { setResultCache } from '../utils/cacheResult';
 import type { ConnectState } from '@/models/connect';
-import { AppIdAndSecretPosition } from '../../ParamsSettings';
+import { AppIdAndSecretPosition } from '../../RecognizeParamsSettings/utils';
 import { getParamsSettings } from '../../ParamsSettings/utils';
-
-interface IResult {
-  list: IFileItem[];
-  total: number;
-  pageNum: number;
-}
+import ExhaustedModalContainer from '../../ExhaustedModal/store';
 
 const useList = () => {
   const [list, setList] = useState<IFileItem[]>([]);
@@ -27,16 +22,21 @@ const useList = () => {
     (states: ConnectState) => states.Robot.info as { service: string },
   );
 
+  const { setBalanceWarningModal } = ExhaustedModalContainer.useContainer();
+
   const containerRef = useRef<HTMLDivElement>(null);
-  const queuesRef = useRef<number[]>();
+
+  useUpdateLayoutEffect(() => {
+    if (list?.length) {
+      // 开启下载样本和PDF封面转换队列
+      window.imgSourceQueue?.start();
+      window.pdfToImageQueue?.start();
+    }
+  }, [list]);
 
   // ocr手动识别
   const { run: runRecognize, fetches } = useRequest(
     ({ keys, ...params }) => {
-      if (!queuesRef.current || !queuesRef.current.length) {
-        queuesRef.current = [...(keys || [])];
-      }
-      params.service = service;
       return robotRecognize(params).then((res) => {
         if (res.code !== 200) {
           return res;
@@ -61,7 +61,7 @@ const useList = () => {
           }
 
           res.data = {
-            id: generateUUID(),
+            id: params.id || generateUUID(),
             count_status: 1,
             ocr_status: 1,
             cloud_ocr: 0,
@@ -73,6 +73,12 @@ const useList = () => {
             thumbnail: params.url,
             result: data.result,
           };
+
+          const curSettings = getParamsSettings();
+          if (curSettings) {
+            if (curSettings.remove_watermark) res.data.result.remove_watermark = '1';
+            if (curSettings.crop_enhance) res.data.result.crop_enhance = '1';
+          }
         }
         return res;
       });
@@ -85,11 +91,15 @@ const useList = () => {
         const hasCountNoMore = COUNT_STATUS_LIST.includes(data?.count_status);
         if (code !== 200) {
           message.destroy();
-          let resMsg = messageByCode[code] || msg || m || '请求失败';
-          if (code === 40101) {
-            resMsg = resMsg += `，${AppIdAndSecretPosition}`;
+          if (code === 40003) {
+            setBalanceWarningModal({ visible: true });
+          } else {
+            let resMsg = messageByCode[code] || msg || m || '请求失败';
+            if (code === 40101 || code === 40102) {
+              resMsg = resMsg += `，${AppIdAndSecretPosition}`;
+            }
+            message.error(resMsg);
           }
-          message.error(resMsg);
           // 底层服务错误不移除文件
           if (params[0].imgData && code !== 30203) {
             // 上传失败的，删除
@@ -110,14 +120,16 @@ const useList = () => {
               if (!item.url && Array.isArray(data.result) && !data.result.length) {
                 return item;
               }
+              if (mdNoPreview(item.name)) {
+                const cover_id = data?.result?.pages?.[0]?.image_id;
+                if (cover_id) {
+                  data.thumbnail = cover_id;
+                }
+              }
               const row = hasCountNoMore
                 ? { ...item, status: 'wait' }
                 : { isLocalUpload: item.isLocalUpload, ...convertFileItem(data) };
               Object.assign(item, row);
-              if (!notSupportPreView(item.name) && params[0]?.url?.startsWith('blob:http')) {
-                item.url = params[0]?.url;
-                item.thumbnail = params[0]?.thumbnail;
-              }
             }
             return item;
           }, [] as IFileItem[]),
@@ -160,33 +172,19 @@ const useList = () => {
   );
 
   useEffect(() => {
-    const ids = Object.keys(fetches)
-      .filter((id) => fetches[id].loading)
-      .map(String);
-
-    const queues = queuesRef.current || [];
-    const queuesMap = queues.map(String);
-    ids.forEach((id) => {
-      const idx = queuesMap.indexOf(id as any);
-
-      if (idx > -1) {
-        queues.splice(idx, 1);
-      }
-    });
-    if (ids.length > 0) {
-      setList((list: IFileItem[]) => {
-        const newList = list.map((item: any) => {
-          if (ids.includes(`${item.id}`)) {
-            return { ...item, status: 'recognize' };
-          }
-          if (queues.map(String).includes(`${item.id}`)) {
-            return { ...item, status: 'queue' };
-          }
-          return item;
-        });
-        return newList;
+    const loadings = Object.entries(fetches)
+      .filter(([key, value]) => {
+        return value.loading;
+      })
+      .map(([key, value]) => key);
+    setList((list) => {
+      list.forEach((item) => {
+        if (loadings.includes(item.id as string)) {
+          item.status = 'recognize';
+        }
       });
-    }
+      return [...list];
+    });
   }, [fetches]);
 
   return {

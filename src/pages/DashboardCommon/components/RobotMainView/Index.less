@@ -21,8 +21,12 @@
   .fileName {
     position: relative;
     margin: 12px 0;
+    padding: 0 8px;
+    overflow: hidden;
     line-height: 16px;
+    white-space: nowrap;
     text-align: center;
+    text-overflow: ellipsis;
 
     &:empty {
       display: none;
@@ -32,7 +36,7 @@
   .fileBox {
     position: relative;
     flex: 1;
-    margin: 0 24px;
+    margin: 0 8px;
     overflow: hidden;
     text-align: center;
     .fileImage {

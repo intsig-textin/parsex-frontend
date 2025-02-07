@@ -16,6 +16,7 @@ const useAfterLoad = (data?: IRectItem[][]) => {
             angle: item.angle || 0,
             renderText: item.render_text,
             sort: ['category'].includes(item.type as string) ? i - 10000 : i,
+            cells: item.cells,
           }))
           .sort((a, b) => a.sort - b.sort),
       );

@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import type { IFileItem } from '@/pages/DashboardCommon/RobotStruct/data';
+import type { IFileItem } from '../../data';
 import FooterButton from './FooterButton';
 import { ResultType } from './RightView';
 import RightView from './RightView';
@@ -45,7 +45,7 @@ export const RobotRightView: FC<IProps> = ({
               markdown,
             }}
             showCopy={[ResultType.md, ResultType.json].includes(currentTab)}
-            showEdit={[ResultType.md].includes(currentTab) && resultJson?.markdown && !disableEdit}
+            showEdit={[ResultType.md].includes(currentTab) && resultJson?.detail && !disableEdit}
           />
         );
       }}

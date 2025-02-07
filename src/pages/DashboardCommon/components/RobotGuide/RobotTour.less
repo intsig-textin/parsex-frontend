@@ -1,0 +1,64 @@
+.tour_tooltips {
+  width: 280px;
+  color: @text-color;
+
+  .tour_desc {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .tour_desc_icon {
+      align-self: flex-start;
+      width: 16px;
+      height: 16px;
+      margin-top: 3px;
+    }
+
+    .tour_desc_text {
+      padding-left: 8px;
+      font-size: 14px;
+    }
+  }
+
+  .operation_btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    .skip_guide {
+      // margin-right: 20px;
+      // color: #858c99;
+      // font-size: 14px;
+      // cursor: pointer;
+      // &:hover {
+      //   color: @primary-color;
+      // }
+    }
+    .btn_wrapper {
+      display: flex;
+      align-items: center;
+      .step_btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 28px;
+        background: #1a66ff;
+        border-radius: 2px;
+
+        .btn_children {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          .arrow_right {
+            margin-left: 4px;
+            g {
+              fill: #fff;
+            }
+          }
+        }
+      }
+      .close_btn {
+        height: 28px;
+      }
+    }
+  }
+}

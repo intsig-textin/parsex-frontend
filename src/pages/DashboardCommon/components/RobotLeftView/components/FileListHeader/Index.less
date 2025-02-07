@@ -4,12 +4,16 @@
   justify-content: space-between;
   height: 36px;
   margin-bottom: 3px;
-  line-height: 36px;
 
   .title {
     // padding-top: 8px;
     color: @normal-font-color;
     font-weight: bold;
+  }
+
+  .tips {
+    display: flex;
+    align-items: center;
   }
 
   // line-height: 64px;
@@ -29,4 +33,48 @@
   //     color: @primary-color-hover !important;
   //   }
   // }
+}
+
+.tipsPopover {
+  .tipsPopoverContent {
+    width: 208px;
+    font-size: 12px;
+    text-align: justify;
+  }
+}
+
+.tipsIcon {
+  color: #868a9c;
+  &:hover {
+    color: @primary-color;
+  }
+}
+
+.settingWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .settingTitle {
+    padding: 0 8px;
+  }
+
+  :global {
+    .ant-switch:not(.ant-switch-small) {
+      height: 20px;
+      line-height: 20px;
+      &.ant-switch-checked {
+        .ant-switch-handle {
+          left: calc(100% - 18px);
+        }
+      }
+      .ant-switch-handle {
+        width: 16px;
+        height: 16px;
+        &::after {
+          border-radius: 8px;
+        }
+      }
+    }
+  }
 }

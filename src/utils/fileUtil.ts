@@ -46,6 +46,16 @@ const base64ToBuffer = (base64: string) => {
   return buffer;
 };
 
+export function blobToFile(blob: any, fileName: any) {
+  // fileName 是你想给文件起的名字
+  return new File([blob], fileName, { type: blob.type });
+}
+
+export const base64ToURL = (base64: any) => {
+  const data = base64ToBlob(base64);
+  return URL.createObjectURL(data);
+};
+
 export const base64ToBlob = (base64: any) => {
   return new Blob([base64ToBuffer(base64)], {
     type: 'application/octet-stream',

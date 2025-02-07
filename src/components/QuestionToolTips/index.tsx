@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import type { TooltipProps } from 'antd';
 import { Tooltip } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
@@ -6,6 +7,8 @@ import styles from './index.less';
 
 type QuestionToolTipsProps = TooltipProps & {
   iconClassName?: string;
+  iconStyle?: React.CSSProperties;
+  defaultPopupContainer?: boolean;
 };
 
 const QuestionToolTips = ({
@@ -14,10 +17,18 @@ const QuestionToolTips = ({
   placement = 'topLeft',
   overlayClassName,
   iconClassName,
+  iconStyle,
   getPopupContainer,
+  defaultPopupContainer,
   children,
   ...rest
 }: QuestionToolTipsProps) => {
+  const getPopupContainerHandle = useCallback((triggerNode: HTMLElement) => {
+    if (getPopupContainer) return getPopupContainer(triggerNode);
+    if (defaultPopupContainer) return document.body;
+    return triggerNode.parentElement as HTMLElement;
+  }, []);
+
   return (
     <Tooltip
       title={title}
@@ -29,12 +40,10 @@ const QuestionToolTips = ({
       color={color}
       placement={placement}
       arrowPointAtCenter
-      getPopupContainer={
-        getPopupContainer || ((node: HTMLElement) => node.parentElement as HTMLElement)
-      }
+      getPopupContainer={getPopupContainerHandle}
       {...rest}
     >
-      <span className={classNames(styles['tips-icon'], iconClassName)}>
+      <span className={classNames(styles['tips-icon'], iconClassName)} style={iconStyle}>
         {children || <QuestionCircleOutlined />}
       </span>
     </Tooltip>

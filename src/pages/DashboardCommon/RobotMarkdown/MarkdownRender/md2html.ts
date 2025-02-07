@@ -3,6 +3,7 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import remarkMath from 'remark-math';
+import rehypeRaw from 'rehype-raw';
 import remarkCustomGfm from './remarkCustomGfm/index';
 
 const md2html = (content: string) => {
@@ -10,6 +11,17 @@ const md2html = (content: string) => {
     .use(remarkParse) // 解析 Markdown
     .use(remarkCustomGfm, { singleTilde: false })
     .use(remarkRehype, { allowDangerousHtml: true }) // 转换为 HTML 树
+    .use(rehypeStringify) // 转换为 HTML 字符串
+    .processSync(content);
+  return res.toString();
+};
+
+export const mdRender = (content: string) => {
+  const res = unified()
+    .use(remarkParse) // 解析 Markdown
+    .use(remarkCustomGfm, { singleTilde: false })
+    .use(remarkRehype, { allowDangerousHtml: true }) // 转换为 HTML 树
+    .use(rehypeRaw)
     .use(rehypeStringify) // 转换为 HTML 字符串
     .processSync(content);
   return res.toString();

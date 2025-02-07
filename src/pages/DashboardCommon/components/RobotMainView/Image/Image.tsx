@@ -1,19 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import Icon from '@ant-design/icons';
-import { Alert, Divider } from 'antd';
+import { Divider } from 'antd';
 import { useLocation, useSelector } from 'umi';
 import type { ConnectState } from '@/models/connect';
-import { getFileNameAndType } from '@/utils';
+import { getFileNameAndType, isIEBrowser } from '@/utils';
+import { mdNoPreview } from '@/services/robot';
 import useMarkTool from './hooks/useRobotMark';
 import useTool from './hooks/useTool';
 import PDFToImage from '../PDFToImage';
 import type { IFile } from '../Index';
 import styles from './index.less';
-import { useLocalStorageState } from 'ahooks';
 import PDFViewer from '../PDFViewer';
 import OFDToImage from '../OFDToImage';
 import TiffToImage from '../TiffToImage';
+import PDFRenderViewer from '../PDFViewer/pdfRender';
 interface ICallBackProps {
   imgRef: React.MutableRefObject<HTMLImageElement | null>;
 }
@@ -33,6 +34,8 @@ export interface ImageProps
   placeholder?: React.ReactNode;
   fallback?: string;
   currentFile?: IFile;
+  docConvertToPDF?: boolean;
+  reserveExif?: boolean;
 }
 type ImageStatus = 'normal' | 'error' | 'loading' | 'wait';
 
@@ -63,6 +66,8 @@ const Image: React.FC<ImageProps> = ({
   useMap,
   alt,
   currentFile,
+  docConvertToPDF = true,
+  reserveExif,
 }) => {
   const { info: robotInfo } = useSelector(({ Robot, Common }: ConnectState) => ({
     info: Robot.info,
@@ -71,25 +76,23 @@ const Image: React.FC<ImageProps> = ({
 
   const isCustomPlaceholder = placeholder && placeholder !== true;
   const [status, setStatus] = useState<ImageStatus>(isCustomPlaceholder ? 'loading' : 'wait');
-  const [imgTotal, setImgTotal] = useState<number>(1);
+  const [showTransition, setShowTransition] = useState(false);
 
   const { query }: Record<string, any> = useLocation();
-
-  const [message, setMessage] = useLocalStorageState<Record<string, any>>(
-    'img-view-multi-tips',
-    {},
-  );
 
   const isError = status === 'error';
   const hasRobotMark = React.isValidElement(children) && React.Children.only(children);
 
-  const { isPDF, isOFD, isTiff } = useMemo(() => {
+  const { isPDF, isDoc, isOFD, isTiff } = useMemo(() => {
     const { type } = getFileNameAndType(currentFile?.name || '');
     if (['pdf', 'doc', 'docx'].includes(type) || currentFile?.isPDF) {
-      return { isPDF: true };
+      return { isPDF: true, isDoc: docConvertToPDF ? false : ['doc', 'docx'].includes(type) };
     } else if (['ofd'].includes(type)) {
       return { isOFD: true };
-    } else if (['tif', 'tiff'].includes(type)) {
+    } else if (
+      ['tif', 'tiff'].includes(type) &&
+      (currentFile?.canToggle ? currentFile.hiddenRects : true)
+    ) {
       return { isTiff: true };
     }
     return {};
@@ -102,6 +105,18 @@ const Image: React.FC<ImageProps> = ({
       onLoad({ target: imgRef.current, type: 'load' });
     }
   }, [refresh]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if ((children as any)?.props?.rectList) {
+      timer = setTimeout(() => {
+        setShowTransition(true);
+      }, 300);
+    }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [children]);
 
   const {
     scale,
@@ -147,9 +162,10 @@ const Image: React.FC<ImageProps> = ({
     }
   };
 
+  const noTransition = isIEBrowser || !showTransition;
   const imgWrapperClass = classNames(`${prefixCls}-img-wrapper`, {
     [`${prefixCls}-error`]: isError,
-    [`${prefixCls}-noTransition`]: isIE11,
+    [`${prefixCls}-noTransition`]: noTransition,
   });
   const toolClassName = `${prefixCls}-operations-operation`;
   const iconClassName = `${prefixCls}-operations-icon`;
@@ -163,7 +179,8 @@ const Image: React.FC<ImageProps> = ({
     className: classNames(`${prefixCls}-img`, {
       [`${prefixCls}-img-placeholder`]: placeholder === true,
       [`${prefixCls}-notEvent`]: React.isValidElement(children),
-      [`${prefixCls}-noTransition`]: isIE11,
+      [`${prefixCls}-noTransition`]: noTransition,
+      [`${prefixCls}-reserveExif`]: reserveExif,
     }),
     style: {
       height,
@@ -171,7 +188,6 @@ const Image: React.FC<ImageProps> = ({
     },
   };
   const angleBasic = angleFix && angle ? rotate + angle : rotate;
-  const showTipServices = [''].includes(query.service);
   const isMarkdown = [16].includes(robotInfo.interaction as number);
   const multiple =
     isMarkdown ||
@@ -182,36 +198,28 @@ const Image: React.FC<ImageProps> = ({
       'recognize_table_multipage',
       'document-multipage',
       'bill_recognize_v2',
+      'bank_receipts',
+      'open_kie_credentials',
+      'customs_declaration',
     ].includes(query.service);
 
-  const showTips = !multiple && showTipServices && !message?.[query.service] && imgTotal > 1;
-  const pdfView = isPDF && multiple;
-  const noImage = isOFD || isPDF || isTiff;
+  const pdfView = isPDF && multiple && !isDoc;
+  const hasDocparser = !!currentFile?.parserPages?.length;
+  const isVLMView = isPDF && [18].includes(robotInfo.interaction as number);
+  // const isMDView = isMarkdown && mdNoPreview(currentFile?.name || '');
+  const isMDView = isMarkdown;
+  const parserView = isVLMView || isMDView;
+  const useDocparserImg = hasDocparser && parserView;
+  const customPreview = pdfView || useDocparserImg;
+  const noImage = isOFD || isPDF || isTiff || parserView;
 
   return (
     <>
-      {showTips && (
-        <div className={styles['pdf-tips-wrapper']}>
-          <Alert
-            type="info"
-            message="多页在线体验仅展示第一页，识别结果为完整结果"
-            className={styles['pdf-tips']}
-            showIcon
-            closable
-            onClose={() => {
-              setMessage((pre) => ({
-                ...(pre || {}),
-                [query.service]: new Date().toLocaleDateString(),
-              }));
-            }}
-          />
-        </div>
-      )}
       <div
         id="imgContainer"
-        onWheel={pdfView ? undefined : (onWheel as any)}
+        onWheel={customPreview ? undefined : (onWheel as any)}
         ref={imgContainerRef}
-        className={classNames(wrapperClassName, { [styles['pdf-viewer']]: pdfView })}
+        className={classNames(wrapperClassName, { [styles['pdf-viewer']]: customPreview })}
         style={wrapperStyle}
       >
         <div
@@ -220,7 +228,18 @@ const Image: React.FC<ImageProps> = ({
             transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
           }}
         >
-          {pdfView && (
+          {useDocparserImg && (
+            <PDFRenderViewer
+              onLoad={onLoad}
+              onError={onError}
+              getImgRef={getImgRef}
+              currentFile={currentFile}
+              scale={scale}
+              angle={rotate}
+            />
+          )}
+
+          {!useDocparserImg && pdfView && (
             <PDFViewer
               onLoad={onLoad}
               onError={onError}
@@ -228,7 +247,7 @@ const Image: React.FC<ImageProps> = ({
               currentFile={currentFile}
             />
           )}
-          {isPDF && !multiple && (
+          {!useDocparserImg && isPDF && !multiple && (
             <PDFToImage
               {...imgCommonProps}
               onLoad={onLoad}
@@ -240,7 +259,6 @@ const Image: React.FC<ImageProps> = ({
               style={{
                 transform: `scale(${scale}, ${scale}) rotate(${rotate}deg)`,
               }}
-              setImgTotal={setImgTotal}
             />
           )}
           {isOFD && (
@@ -272,23 +290,25 @@ const Image: React.FC<ImageProps> = ({
             />
           )}
           {!noImage && isError && fallback && <img {...imgCommonProps} src={fallback} />}
-          {!noImage && !isError && (
-            <img
-              {...imgCommonProps}
-              onLoad={onLoad}
-              onError={onError}
-              src={src}
-              onMouseDown={onMouseDown}
-              ref={getImgRef}
-              style={{
-                transform: `scale(${scale}, ${scale}) rotate(${rotate}deg)`,
-              }}
-            />
-          )}
-          {hasRobotMark && !showTips && !pdfView && (
+          {!isError &&
+            src &&
+            (!noImage || (!useDocparserImg && !pdfView && !isPDF && !isTiff && !isOFD)) && (
+              <img
+                {...imgCommonProps}
+                onLoad={onLoad}
+                onError={onError}
+                src={src}
+                onMouseDown={onMouseDown}
+                ref={getImgRef}
+                style={{
+                  transform: `scale(${scale}, ${scale}) rotate(${rotate}deg)`,
+                }}
+              />
+            )}
+          {hasRobotMark && !customPreview && (
             <div
               className={classNames(`${prefixCls}-robot-mark`, {
-                [`${prefixCls}-noTransition`]: isIE11,
+                [`${prefixCls}-noTransition`]: noTransition, // 旋转的动画
               })}
               style={{
                 transform: `scale(${scale}, ${scale}) rotate(${angleBasic}deg)`,
@@ -306,33 +326,35 @@ const Image: React.FC<ImageProps> = ({
           )}
         </div>
       </div>
-      <ul className={`${prefixCls}-operations`}>
-        {status === 'normal' &&
-          tools.map(({ Icon: IconSvg, onClick, type, disabled, ...props }) => {
-            return (
-              <li
-                className={classNames({
-                  [`${prefixCls}-operations-operation-disabled`]: !!disabled,
-                  [`${prefixCls}-operations-line`]: type === 'line',
-                  [toolClassName]: type !== 'line',
-                })}
-                onClick={onClick}
-                key={type}
-              >
-                {type === 'line' ? (
-                  <Divider type="vertical" />
-                ) : (
-                  <Icon component={IconSvg as any} className={iconClassName} {...props} />
-                )}
-              </li>
-            );
-          })}
-      </ul>
+      <div
+        className={classNames({
+          [styles['custom-viewer-footer']]: customPreview,
+        })}
+      >
+        <ul className={`${prefixCls}-operations`} onMouseEnter={() => setShowTransition(true)}>
+          {status === 'normal' &&
+            tools.map(({ Icon: IconSvg, onClick, type, disabled, ...props }) => {
+              return (
+                <li
+                  className={classNames({
+                    [`${prefixCls}-operations-operation-disabled`]: !!disabled,
+                    [`${prefixCls}-operations-line`]: type === 'line',
+                    [toolClassName]: type !== 'line',
+                  })}
+                  onClick={onClick}
+                  key={type}
+                >
+                  {type === 'line' ? (
+                    <Divider type="vertical" />
+                  ) : (
+                    <Icon component={IconSvg as any} className={iconClassName} {...props} />
+                  )}
+                </li>
+              );
+            })}
+        </ul>
+      </div>
     </>
   );
 };
 export default Image;
-
-const userAgent = navigator.userAgent || window.navigator.userAgent;
-// 判断是否IE<11浏览器
-const isIE11 = userAgent.toLowerCase().match(/rv:([\d.]+)\) like gecko/);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import type { IFileItem } from '../../container/RobotFileList/Index';
 import type { ConnectState } from '@/models/connect';
@@ -9,9 +9,10 @@ import useUploadFormat from '../../store/useUploadFormat';
 import styles from './Index.less';
 import { ReactComponent as DownOutlined } from '@/assets/robot/icon-chevrons-down.svg';
 import { ReactComponent as UpOutlined } from '@/assets/robot/icon-chevrons-up.svg';
+import { ReactComponent as LeftOutlined } from '@/assets/icon/ic_left.svg';
 import classNames from 'classnames';
 import PDFToImage from '../../../RobotMainView/PDFToImage';
-import { getStaticImgURL } from '@/utils';
+import { getFileNameAndType, getStaticImgURL } from '@/utils';
 
 const DemoWrapper = () => {
   const [demoCollapsed, setDemoCollapsed] = useState(true);
@@ -30,13 +31,16 @@ const DemoWrapper = () => {
   useEffect(() => {
     if (Robot.fileFromUrl) {
       const url = getStaticImgURL(Robot.fileFromUrl);
+      const { type } = getFileNameAndType(Robot.fileFromUrl);
       const row: IFileItem = {
         id: Robot.fileFromUrl,
         name: `样本库-${Robot.fileFromUrl}`,
         url,
+        img_uri: url,
         isPDF: url.includes('.pdf') || url.includes('.doc'),
         isDoc: url.includes('.doc'),
         thumbnail: url,
+        thumbnail_id: ['doc', 'docx', 'html', 'mhtml', ''].includes(type) ? Robot.fileFromUrl : '',
         isExample: true,
         status: 'wait',
       };
@@ -48,16 +52,17 @@ const DemoWrapper = () => {
     if (!robotInfo.image) return;
 
     const sampleImageList = robotInfo.image ? robotInfo.image.split('、') : [];
-    const displaySampleList = sampleImageList.slice(0, 3);
+    const displaySampleList = sampleImageList;
     const sampleList: IFileItem[] = displaySampleList.map((url: any, index: number) => {
       const item = url.replace(/\.[a-zA-Z]+?$/i, '');
       return {
         id: item.split('filename=')[1],
         name: `样例${index + 1}`,
         url: item,
+        img_uri: url,
         isPDF: url.includes('.pdf') || url.includes('.doc'),
         isDoc: url.includes('.doc'),
-        thumbnail: `${item}&crop=${CROP_VALUE}`,
+        thumbnail: item,
         isExample: true,
         status: 'wait',
       };
@@ -92,6 +97,46 @@ const DemoWrapper = () => {
     handleCheckFileClick({ ...demo, queryParams: getDefaultUrlParams(idx) });
   };
 
+  // TODO: 示例滚动组件封装成统一的公共组件，目前有两处在使用，重复了
+  // src/pages/DashboardCommon/RobotExtract/components/LeftView/components/LeftExample/index.tsx
+  const demoImageRef = useRef<HTMLDivElement | null>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+  const shouldShowArrow = demoList?.length > 3;
+
+  useEffect(() => {
+    if (!shouldShowArrow) {
+      return;
+    }
+    const handleScroll = () => {
+      if (demoImageRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = demoImageRef.current;
+        setShowLeftArrow(scrollLeft > 0);
+        setShowRightArrow(scrollLeft < scrollWidth - clientWidth);
+      }
+    };
+
+    if (demoImageRef.current) {
+      demoImageRef.current.addEventListener('scroll', handleScroll);
+    }
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      if (demoImageRef.current) {
+        demoImageRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [shouldShowArrow]);
+
+  const scrollByPixels = (pixels: number) => {
+    if (demoImageRef.current) {
+      demoImageRef.current.scrollBy({
+        left: pixels,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   if (!demoList.length) {
     return null;
   }
@@ -108,33 +153,57 @@ const DemoWrapper = () => {
           {!demoCollapsed ? <DownOutlined /> : <UpOutlined />}
         </div>
       </div>
-      <div className={`${styles.demoImage} ${!demoCollapsed ? 'demo-collapsed' : ''}`}>
-        {demoList &&
-          demoList.map((demo, idx) => {
-            return demo.isPDF ? (
+      <div className={styles.demoImageWrapper}>
+        <div
+          ref={demoImageRef}
+          className={`${styles.demoImage} ${!demoCollapsed ? 'demo-collapsed' : ''}`}
+        >
+          {shouldShowArrow && (
+            <>
               <div
-                key={demo.id}
-                className={classNames(styles.img, {
-                  [styles.cur_select]: demo.id === curFileActiveId,
-                })}
-                onClick={() => clickExample(demo, idx)}
+                className={classNames(styles.arrowBox, styles.leftArrow)}
+                onClick={() => scrollByPixels(-267)}
+                style={!showLeftArrow ? { display: 'none' } : { zIndex: 10 }}
               >
-                <PDFToImage
-                  currentFile={{ url: demo.url, isDoc: demo.isDoc }}
-                  onConvertLoad={(e) => onPDFLoad(e, idx)}
-                />
+                <LeftOutlined />
               </div>
-            ) : (
-              <Img
-                {...demo}
-                key={demo.id}
-                className={classNames({
-                  [styles.cur_select]: demo.id === curFileActiveId,
-                })}
-                onClick={() => clickExample(demo, idx)}
-              />
-            );
-          })}
+              <div
+                className={classNames(styles.arrowBox, styles.rightArrow)}
+                onClick={() => scrollByPixels(267)}
+                style={!showRightArrow ? { display: 'none' } : { zIndex: 10 }}
+              >
+                <LeftOutlined />
+              </div>
+            </>
+          )}
+          {demoList &&
+            demoList.map((demo, idx) => {
+              return demo.isPDF ? (
+                <div
+                  key={demo.id}
+                  className={classNames(styles.img, {
+                    [styles.cur_select]: demo.id === curFileActiveId,
+                  })}
+                  onClick={() => clickExample(demo, idx)}
+                >
+                  <PDFToImage
+                    currentFile={{ url: demo.url, isDoc: demo.isDoc }}
+                    onConvertLoad={(e) => onPDFLoad(e, idx)}
+                    type="cover"
+                  />
+                </div>
+              ) : (
+                <Img
+                  {...demo}
+                  key={idx}
+                  className={classNames({
+                    [styles.cur_select]: demo.id === curFileActiveId,
+                  })}
+                  onClick={() => clickExample(demo, idx)}
+                />
+              );
+            })}
+        </div>
       </div>
 
       {/* <>

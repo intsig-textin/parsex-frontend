@@ -17,11 +17,11 @@ interface loadResult {
   status: Status;
 }
 
-const loadScript = (path: string, props: any = {}): loadResult => {
+const loadScript = (path: string, props = {}, handler: any): loadResult => {
   const script = document.querySelector(`script[src="${path}"]`);
 
   if (!script) {
-    const newScript = document.createElement('script') as any;
+    const newScript = document.createElement('script');
     newScript.src = path;
 
     Object.keys(props).forEach((key) => {
@@ -29,6 +29,8 @@ const loadScript = (path: string, props: any = {}): loadResult => {
     });
 
     newScript.setAttribute('data-status', 'loading');
+    newScript.onload = handler;
+    newScript.onerror = handler;
     document.body.appendChild(newScript);
 
     return {
@@ -43,10 +45,10 @@ const loadScript = (path: string, props: any = {}): loadResult => {
   };
 };
 
-const loadCss = (path: string, props: any = {}): loadResult => {
+const loadCss = (path: string, props = {}, handler: any): loadResult => {
   const css = document.querySelector(`link[href="${path}"]`);
   if (!css) {
-    const newCss = document.createElement('link') as any;
+    const newCss = document.createElement('link');
 
     newCss.rel = 'stylesheet';
     newCss.href = path;
@@ -61,6 +63,8 @@ const loadCss = (path: string, props: any = {}): loadResult => {
       newCss.as = 'style';
     }
     newCss.setAttribute('data-status', 'loading');
+    newCss.onload = handler;
+    newCss.onerror = handler;
     document.head.appendChild(newCss);
 
     return {
@@ -85,13 +89,18 @@ const useExternal = (path?: string, options?: Options) => {
       setStatus('unset');
       return;
     }
+    const handler = (event: Event) => {
+      const targetStatus = event.type === 'load' ? 'ready' : 'error';
+      ref.current?.setAttribute('data-status', targetStatus);
+      setStatus(targetStatus);
+    };
     const pathname = path.replace(/[|#].*$/, '');
     if (options?.type === 'css' || (!options?.type && /(^css!|\.css$)/.test(pathname))) {
-      const result = loadCss(path, options?.css);
+      const result = loadCss(path, options?.css, handler);
       ref.current = result.ref;
       setStatus(result.status);
     } else if (options?.type === 'js' || (!options?.type && /(^js!|\.js$)/.test(pathname))) {
-      const result = loadScript(path, options?.js);
+      const result = loadScript(path, options?.js, handler);
       ref.current = result.ref;
       setStatus(result.status);
     } else {
@@ -111,12 +120,6 @@ const useExternal = (path?: string, options?: Options) => {
     } else {
       EXTERNAL_USED_COUNT[path] += 1;
     }
-
-    const handler = (event: Event) => {
-      const targetStatus = event.type === 'load' ? 'ready' : 'error';
-      ref.current?.setAttribute('data-status', targetStatus);
-      setStatus(targetStatus);
-    };
 
     ref.current.addEventListener('load', handler);
     ref.current.addEventListener('error', handler);

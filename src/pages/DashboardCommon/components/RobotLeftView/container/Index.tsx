@@ -6,15 +6,19 @@ import Upload from './Upload';
 import styles from './Index.less';
 import { useScroll } from 'ahooks';
 import classNames from 'classnames';
-import ParamsSelect from '../components/ParamsSelect';
+import RecognizeParamsSettings from '../../RecognizeParamsSettings';
+import RobotTour from '../../RobotGuide/RobotTour';
 
 export interface IProps {
   updateFileStatus?: () => void;
   supportCloudOcr?: boolean;
   currentFile: Partial<IFileItem>;
+  maxUploadNum?: number;
+  showSettings?: boolean;
 }
 
 export default (props: IProps) => {
+  const { maxUploadNum, showSettings, ...rest } = props;
   const { top } = useScroll(document.querySelector('.normalFileList') as HTMLElement);
 
   return (
@@ -24,17 +28,18 @@ export default (props: IProps) => {
           [styles.scroll_effect]: top > 0,
         })}
       >
+        {showSettings && <RecognizeParamsSettings currentFile={rest.currentFile} />}
+        <RobotTour showSettings={showSettings} />
         {/* 示例组件 */}
         <Example />
         <FileListHeader />
-        <Upload />
+        <Upload maxUploadNum={maxUploadNum} />
       </div>
       {/* 列表组件 */}
       <FileList />
       <FooterView>
-        <RecognizeButton {...props} />
+        <RecognizeButton {...rest} />
       </FooterView>
-      <ParamsSelect />
     </>
   );
 };

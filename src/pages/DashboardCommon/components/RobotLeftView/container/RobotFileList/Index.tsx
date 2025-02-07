@@ -17,13 +17,7 @@ export { IFileItem };
 export default () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
 
-  const {
-    list: dataSource,
-    noMore,
-    loading,
-    loadingMore,
-    containerRef,
-  } = listContainer.useContainer();
+  const { list: dataSource, containerRef } = listContainer.useContainer();
 
   const {
     keepLoadingSelected,
@@ -87,17 +81,7 @@ export default () => {
       }
     },
   };
-  const Footer = () => {
-    if (loading || !dataSource.length) {
-      return <></>;
-    }
-    return (
-      <>
-        {!noMore && loadingMore && <Spin />}
-        {noMore && dataSource.length !== 0 && <span>没有更多了</span>}
-      </>
-    );
-  };
+
   return (
     <div ref={containerRef} className={classNames(styles.leftBarMain, 'normalFileList')}>
       <div className={styles.robotFileListContainer}>
@@ -125,22 +109,22 @@ export default () => {
           }}
           metas={{
             content: {
-              render: (_, row) => (
+              render: (_, row, index) => (
                 <File
                   {...row}
                   active={curFileActiveId === row.id}
                   onClick={handleCheckFileClick}
                   onLoad={(e: any) => {
-                    if (e.blob) {
-                      setPDFCache(row.url, e.blob);
+                    if (e.blob && row.id) {
+                      setPDFCache(row.id, e.blob);
                     }
                   }}
+                  priority={1000 - index}
+                  index={index}
                 />
               ),
             },
           }}
-          loading={loading}
-          footer={<Footer />}
         />
       </div>
     </div>

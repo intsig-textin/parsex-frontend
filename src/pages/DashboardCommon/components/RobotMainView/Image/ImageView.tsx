@@ -6,7 +6,7 @@ import OFDToImage from '../OFDToImage';
 import TiffToImage from '../TiffToImage';
 
 interface ImageFormatViewProp extends Record<string, any> {
-  currentFile: Omit<IFile, 'status'> & { status: any };
+  currentFile: Omit<IFile, 'status'> & { status: any; url: string };
 }
 
 function ImageFormatViewComponent({ currentFile, ...rest }: ImageFormatViewProp, ref: any) {

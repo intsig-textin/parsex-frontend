@@ -51,6 +51,21 @@ export const beforeUpload = (fileList: any[], acceptInfo: any) => {
       }
       message.error(`已过滤${fileList.length - result.length}个类型不支持的文件`);
     }
+    if (result.length) {
+      const beforeSize = result;
+      if (typeof acceptInfo?.sizeLimit === 'number') {
+        result = result.filter((file) => file.size <= acceptInfo.sizeLimit * 1024 * 1024);
+      }
+      if (result.length !== beforeSize.length) {
+        if (result.length === 0) {
+          message.error(`上传文件不超过${acceptInfo.sizeLimit}M`);
+          return [];
+        }
+        message.error(
+          `已过滤${beforeSize.length - result.length}个文件大小超过${acceptInfo.sizeLimit}M的文件`,
+        );
+      }
+    }
   } catch (error) {
     console.log('格式校验出错');
   }
@@ -94,7 +109,7 @@ const useFormatList = (initialState: IProps = {}) => {
 
   // 判断pdf页数
   const processPDFPages = (pdfList: File[], nextHandle: (params?: any) => void) => {
-    const pageNumber = 100; // 提示的页数
+    const pageNumber = 20; // 提示的页数
     const curSettings = getParamsSettings();
     // 设置的页数小于需要提示的页数
     if (curSettings?.page_count <= pageNumber) {
@@ -131,16 +146,18 @@ const useFormatList = (initialState: IProps = {}) => {
             title: '提示',
             content: '文件页数较多，是否需要完整识别？',
             closable: true,
-            okText: '识别全部',
-            cancelText: '识别前100页',
-            onCancel: (e: any) => {
+            okText: `识别前${pageNumber}页`,
+            onOk: (e) => {
               if (!e.triggerCancel) {
                 nextHandle({ queryParams: { page_count: pageNumber } });
               }
               return Promise.resolve();
             },
-            onOk: () => {
-              nextHandle();
+            cancelText: '识别全部',
+            onCancel: (e) => {
+              if (!e.triggerCancel) {
+                nextHandle();
+              }
               return Promise.resolve();
             },
           });
@@ -183,14 +200,17 @@ const useFormatList = (initialState: IProps = {}) => {
         id: generateUUID(),
         name: file.name,
         imageData: file,
-        status: 'wait',
+        status: 'queue',
         isLocalUpload: true,
         url,
         thumbnail: url,
       };
     });
 
-    setList((list) => [...[...array].reverse(), ...list]);
+    setList((list) => {
+      list.unshift(...[...array].reverse());
+      return [...list];
+    });
     const keys = array.map((item) => item.id);
 
     const uploadFileQ = array.map(({ name, id, imageData, url }) =>
@@ -258,7 +278,7 @@ const useFormatList = (initialState: IProps = {}) => {
       return;
     }
 
-    const fileList = getPDFFromCacheByUrl(curFiles.map((i) => i.url));
+    const fileList = getPDFFromCacheByUrl(curFiles.map((i) => i.id));
     const pdfList = fileList.filter((i) => i.type === 'application/pdf');
     if (needPDFPageTips.current && pdfLoad && pdfList) {
       processPDFPages(pdfList, (params?: any) =>
@@ -282,7 +302,7 @@ const useFormatList = (initialState: IProps = {}) => {
     ocrParams?: OcrParams,
   ) => {
     fileBeforeUpload.current = curFileRef.current.id;
-    const uploadFileQ = curFiles.map(({ name, id, imageData }) =>
+    const uploadFileQ = curFiles.map(({ name, id, imageData, url }) =>
       limit(() => {
         if (id === curFileRef.current.id) {
           dispatch({
@@ -295,14 +315,17 @@ const useFormatList = (initialState: IProps = {}) => {
         return runRecognize({
           id,
           imgName: name,
+          imgData: imageData,
           keys: keys,
+          url,
+          thumbnail: url,
           ...(Number(robotType) === 3 ? { template: robotInfo.guid } : { service }),
           ...ocrParams,
         });
       }),
     );
     setList((list) =>
-      list.map((item) => (keys.includes(`${item.id}`) ? { ...item, status: 'wait' } : item)),
+      list.map((item) => (keys.includes(`${item.id}`) ? { ...item, status: 'queue' } : item)),
     );
 
     (async () => {

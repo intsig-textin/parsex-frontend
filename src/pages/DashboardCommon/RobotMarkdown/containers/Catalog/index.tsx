@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useUpdateEffect } from 'ahooks';
 import { Tree } from 'antd';
 import classNames from 'classnames';
 import useUploadFormat from '@/pages/DashboardCommon/components/RobotLeftView/store/useUploadFormat';
@@ -10,25 +11,27 @@ import styles from './index.less';
 const Catalog = ({ data: catalog }: { data: any }) => {
   const data = useMemo(() => {
     if (Array.isArray(catalog?.toc)) {
-      return catalog.toc.map((item: any) => ({
-        ...item,
-        level: item.hierarchy,
-        content: item.title,
-        pageNum: item.page_id - 1,
-      }));
+      return catalog.toc
+        .filter((item: any) => !['image_title', 'table_title'].includes(item.sub_type))
+        .map((item: any) => ({
+          ...item,
+          level: item.hierarchy,
+          content: item.title,
+          pageNum: item.page_id - 1,
+        }));
     }
     return catalog?.generate;
   }, [catalog]);
 
   const { collapsed } = useUploadFormat.useContainer();
 
-  const [catalogCollapsed, setCatalogCollapsed] = useState(true);
+  const [catalogCollapsed, setCatalogCollapsed] = useState(false);
 
   const treeData = useMemo(() => {
     return genTableContentTreeList(data);
   }, [data]);
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     setCatalogCollapsed(!collapsed);
   }, [collapsed]);
 
@@ -47,7 +50,7 @@ const Catalog = ({ data: catalog }: { data: any }) => {
       })}
     >
       <div className={styles.catalogTitle} onClick={() => setCatalogCollapsed((pre) => !pre)}>
-        <span>目录</span>
+        <span>{`${catalogCollapsed ? '展开' : '收起'}目录`}</span>
         <img
           src={catalogCollapsed ? ExpandIcon : MenuFolder}
           title={catalogCollapsed ? '展开' : '收起'}

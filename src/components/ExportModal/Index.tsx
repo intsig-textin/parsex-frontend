@@ -22,14 +22,6 @@ interface IExportModal {
   resultExport: (dataType: string, resultType?: number) => void;
 }
 
-const CONTENT = (
-  <div className={styles.popover}>
-    <p style={{ borderRadius: '8px' }}>
-      导出时检测每个文件是否有100%专家识别结果，如果包含100%专家识别结果则优先导出100%专家识别结果，如果没有则导出该文件的OCR结果
-    </p>
-  </div>
-);
-
 const ExportModal = (props: IExportModal) => {
   const { exportTypes, visible, onCancel, resultExport } = props;
 

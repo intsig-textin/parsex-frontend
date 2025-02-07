@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import pQueue from 'p-queue';
-import request from '@/utils/request';
-import { convertOFD } from '@/services/robot';
+import { requestWidthCache } from '@/utils';
+// import { convertOFD } from '@/services/robot';
 import type { IFile } from '../Index';
 
 interface OFDToImageProp extends React.ImgHTMLAttributes<HTMLImageElement> {
@@ -45,9 +45,10 @@ function OFDToImage({
       return;
     }
     try {
-      const file: Blob = await request(url, { prefix: '', responseType: 'blob' });
+      const file: Blob = await requestWidthCache(url, { prefix: '', responseType: 'blob' });
       const blob = new Blob([file.slice(0, file.size)], { type: 'application/ofd' });
-      const imgBlobRes = await convertOFD(blob);
+      // const imgBlobRes = await convertOFD(blob);
+      const imgBlobRes = blob;
       const imgBlob = new Blob([imgBlobRes.slice(0, imgBlobRes.size)], { type: 'image/jpg' });
       const imgUrl = URL.createObjectURL(imgBlob);
       setImgSrc(imgUrl);

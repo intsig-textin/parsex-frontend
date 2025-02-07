@@ -1,0 +1,60 @@
+.robotModalWrap {
+  :global {
+    .ant-modal-content {
+      background: #ffffff;
+      border-radius: 4px;
+      // text-align: center;
+      box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.2);
+      .ant-modal-body {
+        padding: 30px;
+        font-size: 14px;
+        .title {
+          margin-bottom: 24px;
+          font-weight: bold;
+          font-size: 16px;
+          line-height: 16px;
+          img {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+          }
+        }
+
+        // .subTitle {
+        //   margin-bottom: 30px;
+        //   .consumeTitle {
+        //     line-height: 1;
+        //     margin-bottom: 12px;
+        //   }
+        //   .consumeNum {
+        //     color: #4876ff;
+        //   }
+        //   span {
+        //     color: rgba(255, 0, 0, 0.68);
+        //   }
+        // }
+        .ant-btn {
+          width: 128px;
+          height: 40px;
+          padding: 9px 0;
+          border-radius: 8px;
+          box-shadow: none;
+          &-primary:hover,
+          &-primary:focus {
+            background-color: #4877ff;
+            border-color: #4877ff;
+          }
+          & + button {
+            margin-left: 12px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.recommendBtnWrapper {
+  display: inline-block;
+  margin-left: 20px;
+  user-select: none;
+}

@@ -54,6 +54,7 @@ const RightContainer: FC<IProps> = ({
         className={classNames(
           'robotResultTabContainer',
           'tour_step_2',
+          'result-content-body',
           wrapperClassName,
           styles.rightContainer,
         )}
@@ -68,7 +69,7 @@ const RightContainer: FC<IProps> = ({
           <Tabs.TabPane
             tab={resultTabName ?? tabMap[ResultType.text]}
             key={ResultType.text}
-            className="result-text result-content-body"
+            className="result-text"
           >
             {resultLoading ? <Loading type="normal" /> : children}
           </Tabs.TabPane>

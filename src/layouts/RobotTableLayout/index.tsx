@@ -2,9 +2,7 @@ import Header from '@/components/GlobalHeader/DesktopHeader/Index';
 import type { ReactNode } from 'react';
 import LogoCompose from '../components/LogoCompose';
 import type { Dispatch } from 'umi';
-import { connect, history } from 'umi';
 import styles from './index.less';
-import type { IUserModelState } from '@/models/connect';
 
 const RobotTableLayout = ({ children, dispatch }: { children: ReactNode; dispatch: Dispatch }) => {
   return (

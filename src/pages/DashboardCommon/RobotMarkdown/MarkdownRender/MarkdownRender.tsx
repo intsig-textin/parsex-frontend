@@ -3,9 +3,9 @@ import rehypeRaw from 'rehype-raw';
 import classNames from 'classnames';
 import remarkCustomGfm from './remarkCustomGfm/index';
 import { useRefreshMath } from '../MathJaxRender/useMathJaxLoad';
+import CopyWrapper from '../containers/CopyWrapper';
 import LazyImage from './LazyImage';
 import styles from './index.less';
-import CopyWrapper from '../containers/CopyWrapper';
 
 const MarkdownRender = ({ content, className }: { content: string; className?: string }) => {
   useRefreshMath(content);

@@ -2,22 +2,21 @@ import { useEffect, useRef, useState } from 'react';
 import { message } from 'antd';
 import { createContainer } from 'unstated-next';
 import type { IFileItem } from '../data.d';
-import { listContainer } from './useList';
-import request from '@/utils/request';
+import { requestWidthCache } from '@/utils';
 import { useDispatch, useSelector } from 'umi';
 import type { ConnectState } from '@/models/connect';
 import { getFileNameAndType } from '@/utils';
 import { getUrlFromExifRotateImg } from '@/utils/removeImgExif';
-import { getPDFCache } from '../utils/cachePDF';
 
 interface IProps {
   onFileClick?: (item: Partial<IFileItem>) => void;
   getChooseList?: (list: IFileItem[]) => void;
   currentFile?: Partial<IFileItem>;
+  reserveExif?: boolean;
 }
 
 function useFile(initialState: IProps = {}) {
-  const { onFileClick, currentFile, getChooseList } = initialState;
+  const { onFileClick, currentFile, getChooseList, reserveExif } = initialState;
   const dispatch = useDispatch();
   const { loading, resultLoading } = useSelector((state: ConnectState) => state.Common);
   // 目前点击文件
@@ -54,13 +53,6 @@ function useFile(initialState: IProps = {}) {
       });
     }
   }, [currentFile?.status]);
-
-  useEffect(() => {
-    if (isSelectAll) {
-      setIsSelectAll(false);
-      setKeepLoadingSelectAll(true);
-    }
-  }, [isSelectAll]);
 
   const handleCheckFileClick = async (file: IFileItem, afterUpload?: boolean) => {
     if (file.status === 'recognize' || file.status === 'queue')
@@ -105,29 +97,18 @@ function useFile(initialState: IProps = {}) {
     setCurFileActiveId(file.id as string);
     if (onFileClick) {
       try {
-        let imgBlob = file.imgData;
         const { type } = getFileNameAndType(file?.name || '');
-        const isDoc = ['doc', 'docx'].includes(type);
-        file.isDoc = isDoc;
-        if (!imgBlob && type === 'pdf') {
-          imgBlob = getPDFCache(file.url);
-        }
-        if (!imgBlob && !isDoc) {
-          imgBlob = await request(file.url, { responseType: 'blob', prefix: '' });
-        }
         try {
-          if (type && imgBlob && ['jpg', 'jpeg', 'png'].includes(type)) {
+          if (type && ['jpg', 'jpeg', 'png'].includes(type) && !reserveExif) {
+            let imgBlob = await requestWidthCache(file.url, { responseType: 'blob', prefix: '' });
             imgBlob = await getUrlFromExifRotateImg(imgBlob);
             file.url = URL.createObjectURL(imgBlob);
           }
         } catch (error) {
           console.log('getUrlFromExifRotateImg', error);
         }
-        if (typeof file.url === 'string' && imgBlob && !/^blob:/.test(file.url)) {
-          file.url = URL.createObjectURL(imgBlob);
-        }
         onFileClick({ ...file });
-        // console.log('onFileClick', { ...file });
+        console.log('onFileClick', { ...file });
         // eslint-disable-next-line no-empty
       } catch (error) {
         console.log('error', error);

@@ -2,7 +2,7 @@ import { Divider, Layout, Space } from 'antd';
 import type { FC, ReactNode } from 'react';
 import classNames from 'classnames';
 import { menuList } from './constants';
-import styles from './Index.less'
+import styles from './Index.less';
 
 const { Header } = Layout;
 interface HeaderProps {

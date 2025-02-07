@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import * as UTIF from 'utif';
-import request from '@/utils/request';
+import { requestWidthCache } from '@/utils';
 import type { IFile } from '../Index';
 
 interface TiffToImageProp extends React.ImgHTMLAttributes<HTMLImageElement> {
@@ -72,7 +72,7 @@ function TiffToImage({
       return;
     }
     try {
-      const file: Blob = await request(url, { prefix: '', responseType: 'arrayBuffer' });
+      const file: Blob = await requestWidthCache(url, { prefix: '', responseType: 'arrayBuffer' });
       const blob = new Blob([file.slice(0, file.size)], { type: 'image/tiff' });
       const imgBlob = await tiffToPng(blob);
       const imgUrl = URL.createObjectURL(imgBlob as Blob);

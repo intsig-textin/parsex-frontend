@@ -1,10 +1,12 @@
 export interface IFile {
   url: string;
-  id?: number | string;
+  id: number | string;
   name: string;
   thumbnail?: string;
   isExample?: boolean;
   status: 'wait' | 'recognize' | 'complete' | 'upload' | 'timeout' | 'queue';
+  time?: string;
+  [key: string]: any;
 }
 export interface IFileItem extends IFile {
   imageData?: any;
@@ -14,4 +16,9 @@ export interface IFileItem extends IFile {
   time?: string;
   isLocalUpload?: boolean;
   [key: string]: any;
+}
+
+export interface OcrParams {
+  queryParams?: Record<string, any>;
+  filePageCountMap?: Record<string, any>;
 }

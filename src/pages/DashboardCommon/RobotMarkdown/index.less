@@ -1,0 +1,14 @@
+.toggleView {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  a:not(.disabledClick):hover {
+    text-decoration: underline;
+  }
+
+  .disabledClick {
+    color: @text-gray-color;
+    cursor: not-allowed;
+  }
+}

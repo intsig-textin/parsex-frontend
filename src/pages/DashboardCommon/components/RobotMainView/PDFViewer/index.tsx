@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Pagination, message } from 'antd';
-import { useEventListener, useSize } from 'ahooks';
+import { useDebounceFn, useSize } from 'ahooks';
 import { ReactComponent as OutlineRight } from '@/assets/icon/dashbord/outline-right.svg';
 import { ReactComponent as OutlineLeft } from '@/assets/icon/dashbord/outline-left.svg';
 import useLoadPDF from '../PDFToImage/useLoadPDF';
@@ -28,11 +28,13 @@ function PDFViewer({
     current: 1,
     total: 0,
   });
+  const [status, setStatus] = useState<'no_password'>();
+  const [renderRefresh, serRenderRefresh] = useState<any>();
   const { pdfLoad, buildDir, cmapsURL } = useLoadPDF({
     onError: () => onError?.({}),
   });
 
-  const containerRef = useRef();
+  const containerRef = useRef<any>();
   const viewerRef = useRef<any>();
   const lockRef = useRef({ url: '', lock: false });
   const timeoutRef = useRef<any>();
@@ -46,33 +48,13 @@ function PDFViewer({
 
   const { getBlobUrl } = useConvert();
 
-  useEventListener('resize', resize, { target: window });
+  const { run: debouncedResize } = useDebounceFn(resize, { wait: 300 });
 
-  useEventListener(
-    'transitionend',
-    (e: any) => {
-      if (e.propertyName === 'width') {
-        resize();
-      }
-    },
-    { target: document.querySelector('.imgContainer') },
-  );
-
-  // useEventListener(
-  //   'transitionend',
-  //   (e: any) => {
-  //     if (e.propertyName === 'width') {
-  //       resize();
-  //     }
-  //   },
-  //   { target: document.querySelector('.catalogViewContainer') },
-  // );
-
-  const catalogSize = useSize(document.querySelector('.catalogViewContainer') as HTMLElement);
+  const viewContainerSize = useSize(containerRef.current?.parentElement);
 
   useEffect(() => {
-    resize();
-  }, [catalogSize]);
+    debouncedResize();
+  }, [viewContainerSize.width]);
 
   useEffect(() => {
     if (currentFile?.rects) {
@@ -81,7 +63,12 @@ function PDFViewer({
         rects: currentFile.rects,
         viewerRef: viewerRef.current,
         dpi: currentFile.dpi,
+        currentFile,
       });
+      if (status === 'no_password' && getParamsSettings()?.pdf_pwd) {
+        lockRef.current.lock = false;
+        serRenderRefresh(Date.now());
+      }
     }
   }, [currentFile?.rects]);
 
@@ -147,78 +134,48 @@ function PDFViewer({
           message: error,
         };
         console.log(info);
+        if (error?.name === 'PasswordException') {
+          setStatus('no_password');
+        }
       });
     }
-  }, [viewerCss, viewer, sandbox, pdfLoad]);
+  }, [viewerCss, viewer, sandbox, pdfLoad, renderRefresh]);
 
   async function onMounted() {
-    const CMAP_URL = cmapsURL;
-    const CMAP_PACKED = true;
-
     const DEFAULT_URL = await getBlobUrl({ ...latestFile.current });
     if (!DEFAULT_URL) return;
-
-    const ENABLE_XFA = true;
-    const SEARCH_FOR = ''; // try "Mozilla";
-
-    const SANDBOX_BUNDLE_SRC = window.pdfjsSandbox;
 
     const container = containerRef.current;
 
     const eventBus = new window.pdfjsViewer.EventBus();
 
-    // (Optionally) enable hyperlinks within PDF files.
-    const pdfLinkService = new window.pdfjsViewer.PDFLinkService({
-      eventBus,
+    eventBus.on('pagesinit', function () {
+      pdfViewer.currentScaleValue = 'page-width';
     });
 
-    // (Optionally) enable find controller.
-    const pdfFindController = new window.pdfjsViewer.PDFFindController({
-      eventBus,
-      linkService: pdfLinkService,
-    });
-
-    // (Optionally) enable scripting support.
-    const pdfScriptingManager = new window.pdfjsViewer.PDFScriptingManager({
-      eventBus,
-      sandboxBundleSrc: SANDBOX_BUNDLE_SRC,
-    });
-
+    /**
+     * options
+     * https://github.com/mozilla/pdf.js/blob/v2.11.338/web/base_viewer.js#L188-L204
+     */
     const pdfViewer = new window.pdfjsViewer.PDFViewer({
       container,
       eventBus,
-      linkService: pdfLinkService,
-      findController: pdfFindController,
-      scriptingManager: pdfScriptingManager,
-      enableScripting: true, // Only necessary in PDF.js version 2.10.377 and below.
-    });
-    pdfLinkService.setViewer(pdfViewer);
-    pdfScriptingManager.setViewer(pdfViewer);
-
-    eventBus.on('pagesinit', function () {
-      // We can use pdfViewer now, e.g. let's change default scale.
-      pdfViewer.currentScaleValue = 'page-width';
-
-      // We can try searching for things.
-      if (SEARCH_FOR) {
-        eventBus.dispatch('find', { type: '', query: SEARCH_FOR });
-      }
+      annotationMode: 0, // 禁用注释
+      removePageBorders: true, // 移除页边框
     });
 
-    // Loading document.
+    /**
+     * options
+     * https://github.com/mozilla/pdf.js/blob/v2.11.338/src/display/api.js#L320-L328
+     */
     const loadingTask = window.pdfjsLib.getDocument({
       password: getParamsSettings()?.pdf_pwd,
       url: DEFAULT_URL,
-      cMapUrl: CMAP_URL,
-      cMapPacked: CMAP_PACKED,
-      enableXfa: ENABLE_XFA,
+      cMapUrl: cmapsURL,
+      cMapPacked: true,
     });
     const pdfDocument = await loadingTask.promise;
-    // Document loaded, specifying document for the viewer and
-    // the (optional) linkService.
     pdfViewer.setDocument(pdfDocument);
-
-    pdfLinkService.setDocument(pdfDocument, null);
 
     viewerRef.current = pdfViewer;
 
@@ -234,6 +191,7 @@ function PDFViewer({
         rects: latestFile.current.rects,
         viewerRef: viewerRef.current,
         dpi: latestFile.current.dpi,
+        currentFile,
       });
     }
   }

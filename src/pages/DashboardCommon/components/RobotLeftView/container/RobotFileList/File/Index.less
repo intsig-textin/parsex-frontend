@@ -48,6 +48,8 @@
     .fileNameWrapper {
       display: flex;
       align-items: center;
+      width: 140px;
+      overflow: hidden;
       font-size: 12px;
       .fileStatus {
         display: flex;
@@ -56,7 +58,7 @@
       }
     }
     .fileName {
-      max-width: 128px;
+      flex: 1 1 140px;
       overflow: hidden;
       color: #030a1a;
       white-space: nowrap;
@@ -72,6 +74,29 @@
       line-height: 12px;
       // transform: scale(0.8);
       //transform-origin: 0%;
+    }
+
+    .delete {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: none;
+      color: #868a9c;
+
+      &.show {
+        display: block;
+        color: @error-color;
+      }
+
+      &:hover {
+        color: @error-color;
+      }
+    }
+  }
+
+  &:hover {
+    .delete {
+      display: block;
     }
   }
 }

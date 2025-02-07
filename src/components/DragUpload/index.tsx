@@ -7,6 +7,7 @@ import type { RcFile } from 'antd/lib/upload/interface';
 import styles from './index.less';
 import classNames from 'classnames';
 import usePaste from '../GlobalDragUpload/usePaste';
+
 const { Dragger } = Upload;
 const uploadProps = {
   accept: 'image/*',
@@ -28,6 +29,8 @@ export interface IProps {
   desc?: string;
   accept?: string;
   acceptDesc?: string;
+  size?: number;
+  noPaste?: boolean;
 }
 
 export default ({
@@ -36,6 +39,7 @@ export default ({
   children,
   maxUploadNum = 50,
   desc,
+  noPaste,
   ...rest
 }: IProps) => {
   const [fileList, setFileList] = useState<RcFile[]>([]);
@@ -56,9 +60,10 @@ export default ({
   // ctrl v
   usePaste({
     onPaste: (fileList) => {
+      if (noPaste) return;
       if (fileList.length < 1) return;
       if (fileList.length > maxUploadNum) {
-        message.warn('单次批量上传最多50张');
+        message.warn(`单次批量上传最多${maxUploadNum}张`);
       }
       onUpload(fileList.slice(0, maxUploadNum));
     },
@@ -84,7 +89,7 @@ export default ({
             <div className={styles.image_wrapper}>
               <img src={Restultimg} alt="" />
             </div>
-            <div className={styles.action_guide}>单击选择文件或拖放文件到这里</div>
+            <div className={styles.action_guide}>点击上传文件 / 拖拽文件到此处 / 截图后ctrl+v</div>
             <div className={styles.desc}>
               {!desc && (
                 <div>
@@ -93,7 +98,7 @@ export default ({
                       ? acceptDesc.replace(/[,.。]$/, '，')
                       : `支持${acceptDesc}等格式，`}
                   </div>
-                  <div>上传单个文件大小不超过10M</div>
+                  <div>上传单个文件大小不超过{rest.size || 10}M</div>
                 </div>
               )}
             </div>

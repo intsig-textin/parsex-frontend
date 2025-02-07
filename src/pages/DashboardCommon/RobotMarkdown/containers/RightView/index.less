@@ -1,28 +1,37 @@
 .rightContainer {
+  display: flex;
   flex: 1 1 auto;
+  flex-direction: column;
   height: 100%;
   overflow: hidden;
 
   .header {
     display: flex;
-    align-items: center;
+    flex: 0 0 auto;
+    align-items: flex-start;
     justify-content: space-between;
     cursor: pointer;
 
     .markdownSwitch {
-      width: 32px;
-      margin: 0 16px;
+      width: 24px;
+      margin: 20px 16px 0 0;
     }
 
     .autoSave {
       display: flex;
       align-items: center;
-      margin: 0 16px;
+      height: 32px;
+      margin: 20px 16px 0 0;
+      white-space: nowrap;
     }
   }
 
   .radioBtnGroup {
-    margin: 20px 30px;
+    margin: 12px 30px;
+
+    label {
+      margin-top: 8px;
+    }
   }
 
   .jsonViewWrapper {
@@ -30,7 +39,7 @@
   }
 
   .contentWrapper {
-    height: calc(100% - 72px);
+    flex: 1 1 auto;
     overflow-y: auto;
   }
 }

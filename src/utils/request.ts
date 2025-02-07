@@ -69,8 +69,8 @@ const errorHandler = async (error: ResponseError<any>): Promise<Response> => {
 };
 
 export const envUrl = {
-  [env.TEST]: 'https://api.textin.com',
-  [env.PRODUCTION]: 'https://api.textin.com',
+  [env.TEST]: 'https://web-api.textin.com',
+  [env.PRODUCTION]: 'https://web-api.textin.com',
 };
 
 export const ocrUrl = {

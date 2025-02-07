@@ -3,13 +3,13 @@ import type { FC, ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import { Radio, Tooltip, Switch } from 'antd';
 import ReactJson from 'react-json-view';
-import lodash from 'lodash';
 import { connect } from 'umi';
 import type { ConnectState } from '@/models/connect';
-import markdownSwitchIcon from '@/assets/images/markdown_switch.png';
+import markdownSwitchOld from '@/assets/images/markdown_switch_old.png';
+import markdownSwitchNew from '@/assets/images/markdown_switch_new.png';
 import Loading, { DotsLoading } from '@/components/Loading';
 import styles from './index.less';
-import { storeContainer } from '../../../RobotStruct/store';
+import { storeContainer } from '../../store';
 
 enum ResultType {
   json = 'json',
@@ -18,6 +18,8 @@ enum ResultType {
   image = 'image',
   formula = 'formula',
   handwriting = 'handwriting',
+  header_footer = 'header_footer',
+  doc_base64 = 'docx',
 }
 
 export { ResultType };
@@ -32,13 +34,14 @@ interface IProps {
   Robot: ConnectState['Robot'];
   children?: any;
 }
-const tabMap = {
+const tabMap: Record<string, any> = {
   [ResultType.md]: 'Markdown结果',
   [ResultType.table]: '表格',
   [ResultType.image]: '图片',
   [ResultType.formula]: '公式',
   [ResultType.json]: '原始JSON',
   [ResultType.handwriting]: '手写',
+  [ResultType.header_footer]: '页眉页脚',
 };
 const RightContainer: FC<IProps> = ({
   renderFooter,
@@ -53,6 +56,7 @@ const RightContainer: FC<IProps> = ({
   const { resultLoading } = Common;
 
   const {
+    rawResultJson,
     showModifiedMarkdown,
     setShowModifiedMarkdown,
     markdownMode,
@@ -71,17 +75,13 @@ const RightContainer: FC<IProps> = ({
       ResultType.formula,
       ResultType.image,
       ResultType.handwriting,
+      ResultType.header_footer,
       ResultType.json,
     ].map((item) => ({
       label: tabMap[item],
       value: item,
     }));
   }, []);
-
-  const showJSON = useMemo(() => {
-    if (!result) return {};
-    return lodash.omit(result, ['dpi', 'catalog', 'detail_new', 'markdown_new']);
-  }, [result]);
 
   const showMarkdownSwitcher = useMemo(() => {
     return resultType === ResultType.md && result?.detail_new && markdownMode === 'view';
@@ -103,7 +103,7 @@ const RightContainer: FC<IProps> = ({
       return (
         <div className={classNames(styles.contentWrapper, styles.jsonViewWrapper)}>
           <ReactJson
-            src={showJSON}
+            src={rawResultJson}
             enableClipboard={false}
             onEdit={false}
             name={null}
@@ -151,7 +151,7 @@ const RightContainer: FC<IProps> = ({
             >
               <img
                 className={styles.markdownSwitch}
-                src={markdownSwitchIcon}
+                src={showModifiedMarkdown ? markdownSwitchNew : markdownSwitchOld}
                 onClick={() => {
                   setShowModifiedMarkdown(!showModifiedMarkdown);
                 }}

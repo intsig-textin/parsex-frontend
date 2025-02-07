@@ -1,5 +1,8 @@
 import { getParamsSettings } from '@/pages/DashboardCommon/components/ParamsSettings/utils';
-import { getResultCache } from '@/pages/DashboardCommon/components/RobotLeftView/utils/cacheResult';
+import {
+  getResultCache,
+  updateResultCache,
+} from '@/pages/DashboardCommon/components/RobotLeftView/utils/cacheResult';
 import type { IResponse } from '@/utils';
 import {
   filterObject,
@@ -8,8 +11,8 @@ import {
   replaceFileSuffixName,
   uppercaseFileType,
   getOCRPrefix,
+  requestWidthCache,
 } from '@/utils';
-import { stringify } from 'query-string';
 import { getDvaApp } from 'umi';
 
 export interface IRobotTypeParams {
@@ -170,12 +173,13 @@ export async function robotRecognizeHistory(id: React.ReactText) {
   return request<IHistoryRes>(`/service/history/${id}`);
 }
 
-interface IUpdateHistory {
-  id: React.ReactText;
+export interface IUpdateHistory {
+  id?: string | number;
   type: 1 | 2; // 1 ocr、2 精准识别
   data: any;
 }
 export async function robotUpdateHistory({ id, type, data }: IUpdateHistory) {
+  updateResultCache(id, data);
   return request<IHistoryRes>(`/service/history/${id}/update/${type}`, {
     method: 'POST',
     data: { data },
@@ -183,10 +187,11 @@ export async function robotUpdateHistory({ id, type, data }: IUpdateHistory) {
 }
 
 export interface IRecognizeReq {
+  [key: string]: any;
   service?: string; // 标准机器人Id
   template?: string; // 自建机器人 guid
-  id: any;
-  imgData?: string;
+  id?: any;
+  imgData?: any;
   exampleFlag?: boolean;
   imgName?: string;
   queryParams?: Record<string, any>;
@@ -196,6 +201,14 @@ interface IRecognizeRes extends IResponse {
   data: any;
   message?: string;
 }
+
+// 文档解析需要引擎返回图片进行预览的文件
+export const mdNoPreview = (name: string) => {
+  return !/\.(jpg|jpeg|pjp|pjpeg|jfif|png|bmp|tif[f]?|webp|svg|heif|heic|pdf)$/i.test(name);
+};
+export const imagePreview = (name: string) => {
+  return /\.(jpg|jpeg|pjp|pjpeg|jfif|png|bmp|tif[f]?|webp|svg|heif|heic)$/i.test(name);
+};
 
 // OCR 识别针对1.3版本之后 @TODO: 文件名编码 encodeURIComponent
 export async function robotRecognize({
@@ -245,18 +258,31 @@ export async function robotRecognize({
     param = { ...param, ...queryParams };
   }
 
-  if (!param.hasOwnProperty('catalog_details')) {
-    param.catalog_details = 1;
+  const isMarkdown = true;
+  const filename = param.img_name || param.file_name || '';
+  if (isMarkdown) {
+    // 水印和切边，需要预览处理后的图片
+    const needOcrPreview = param.remove_watermark || param.crop_enhance;
+    if (needOcrPreview && imagePreview(filename)) {
+      param.image_output_type = 'base64str';
+    }
+    // 前端无法预览的类型，需要引擎转的图片
+    const cannotPreview = (!exampleFlag || param.file_name) && mdNoPreview(filename);
+    if (needOcrPreview || cannotPreview) {
+      param.get_image = ['objects', 'both'].includes(param.get_image) ? 'both' : 'page';
+      param.page_details = 1;
+    }
   }
 
-  const requestUrl = param.custom_api ? param.custom_api : '/ai/service/v1/pdf_to_markdown';
+  const { custom_api, 'x-ti-app-id': appId, 'x-ti-secret-code': secretCode, ...urlParams } = param;
+  const requestUrl = custom_api || '/ai/service/v1/pdf_to_markdown';
 
-  return request<IRecognizeRes>(paramToString(param, requestUrl), {
+  return request<IRecognizeRes>(paramToString(urlParams, requestUrl), {
     ...bodyOption,
     prefix: getOCRPrefix(),
     headers: {
-      'x-ti-app-id': param['x-ti-app-id'],
-      'x-ti-secret-code': param['x-ti-secret-code'],
+      'x-ti-app-id': appId,
+      'x-ti-secret-code': secretCode,
     },
   });
 }
@@ -270,29 +296,16 @@ export interface IRobotSceneResponse extends IResponse {
   data: IRobotSceneItemProp[];
 }
 
-//问题反馈
-interface Iparams {
-  type: number;
-  url: string;
-  source: 1;
-  product: string;
-  summary: string;
-  description: string;
-  image: string;
-}
-interface Iresponse {
-  code: number;
-  msg: string;
-  data: {
-    status: number;
-    issure_id: string;
-  };
-}
-
-export function convertOFD(file: any) {
-  return request<Blob>('/files/ofd_convert', {
-    method: 'POST',
-    data: file,
-    responseType: 'blob',
+export function downloadOcrImg(image_id: string) {
+  // 参数设置的值
+  const curSettings = getParamsSettings();
+  const { 'x-ti-app-id': appId, 'x-ti-secret-code': secretCode } = curSettings || {};
+  return requestWidthCache.get(`/ocr_image/download?image_id=${image_id}`, {
+    // prefix: 'https://web-api.textin.com',
+    forceHeader: true,
+    headers: {
+      'x-ti-app-id': appId,
+      'x-ti-secret-code': secretCode,
+    },
   });
 }

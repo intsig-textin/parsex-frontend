@@ -1,6 +1,6 @@
 import pQueue from 'p-queue';
 import qs from 'qs';
-import { request } from '@/utils';
+import { request, requestWidthCache } from '@/utils';
 
 const cacheKey = '_doc_convert_cache';
 const cacheLength = 10;
@@ -43,12 +43,14 @@ const useConvert = () => {
           if (cacheData) return URL.createObjectURL(cacheData);
           let blob = imgData;
           if (/^blob:/.test(url) && !blob) {
-            blob = await request(url, { responseType: 'blob', prefix: '' });
+            blob = await requestWidthCache(url, { responseType: 'blob', prefix: '' });
           }
           const convertBlob = await request.post(`/files/doc_convert`, {
             params: { filename: qs.parse(url.split('?').pop()).filename },
             data: blob,
             responseType: 'blob',
+            timeout: 1000 * 5,
+            noMessage: true,
           });
           const pdfBlob = new Blob([convertBlob.slice(0, convertBlob.size)], {
             type: 'application/pdf',

@@ -5,6 +5,7 @@ import { prefixPath } from '@/utils';
 
 export const useRefreshMath = (refresh: any) => {
   const refreshHandle = () => {
+    if (!window.MathJax?.typesetPromise) return;
     window.MathJax.typesetPromise();
   };
 

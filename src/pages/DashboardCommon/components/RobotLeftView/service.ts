@@ -27,12 +27,6 @@ export interface IQueryListRes extends IResponse {
     data: IListItem[];
   };
 }
-interface IQueryListReq {
-  service: React.ReactText;
-  robotType: React.ReactText;
-  pageSize?: number;
-  pageNum?: number;
-}
 
 export interface IPreciseRecognizeReq {
   service: string;

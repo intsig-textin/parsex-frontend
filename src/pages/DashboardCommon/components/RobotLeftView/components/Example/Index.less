@@ -34,19 +34,30 @@
       }
     }
   }
+  .demoImageWrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
   .demoImage {
     display: flex;
-    // justify-content: space-between;
     align-content: center;
     width: 100%;
     padding: 12px 0;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .img {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 78px;
-      height: 78px;
+      width: 79px;
+      min-width: 79px;
+      height: 79px;
       overflow: hidden;
       background-position: center;
       background-size: cover;
@@ -66,6 +77,54 @@
     .cur_select {
       border-color: @primary-color-hover;
       border-width: 2px;
+    }
+    .arrowBox {
+      position: absolute;
+      top: 50%;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(138deg, #e5eaf2 0%, #f5f8fc 100%);
+      border: 1px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0px 2px 8px 0px rgba(11, 45, 115, 0.3);
+      transform: translateY(-50%);
+      cursor: pointer;
+      &:hover {
+        svg {
+          path {
+            fill: #1a66ff;
+          }
+        }
+      }
+    }
+    .leftArrow {
+      left: 8px;
+      &::before {
+        position: absolute;
+        left: -8px;
+        width: 12px;
+        height: 79px;
+        background: linear-gradient(90deg, #ccd0d9 0%, rgba(204, 208, 217, 0) 100%);
+        content: '';
+      }
+    }
+    .rightArrow {
+      right: 8px;
+      &::after {
+        position: absolute;
+        right: -7px;
+        width: 12px;
+        height: 79px;
+        background: linear-gradient(270deg, #ccd0d9 0%, rgba(204, 208, 217, 0) 100%);
+        content: '';
+      }
+      svg {
+        transform: rotate(180deg);
+      }
     }
   }
   :global {

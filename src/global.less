@@ -615,3 +615,21 @@ ul {
     }
   }
 }
+
+// ckeditor
+:global {
+  .ck.ck-powered-by {
+    display: none !important;
+  }
+
+  .ck-body-wrapper .ck.ck-list {
+    margin: 0;
+    padding: 0;
+  }
+  .ck-body-wrapper .ck-dropdown:nth-of-type(1) .ck-list > :nth-child(1),
+  .ck-body-wrapper .ck-dropdown:nth-of-type(1) .ck-list > :nth-child(2),
+  .ck-body-wrapper .ck-dropdown:nth-of-type(2) .ck-list > :nth-child(1),
+  .ck-body-wrapper .ck-dropdown:nth-of-type(2) .ck-list > :nth-child(2) {
+    display: none;
+  }
+}

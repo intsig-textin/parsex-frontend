@@ -14,10 +14,12 @@ const defaultMap: Record<string, string[]> = {
 };
 
 export function formatSuffix(description: string, service?: string) {
-  if (!description || typeof description !== 'string' || !service) return {};
-  let des = description.replace(/[等]$/, '').replace(/body/, '');
+  const defaultRes = { acceptStr: '*', acceptDes: '*' };
+  if (!description || typeof description !== 'string' || !service) return defaultRes;
+  let des = description.trim().replace(/[等]$/, '').replace(/body/, '');
   if (Array.isArray(des)) des = des.join(',');
   if (des && typeof des === 'string') {
+    let result: any = {};
     const separator = des.includes(',') ? ',' : '、';
     const accept = des
       .split(separator)
@@ -28,17 +30,21 @@ export function formatSuffix(description: string, service?: string) {
       })
       .filter((item) => item);
     const defaultAccept = defaultMap[service];
-    let result;
     if (!accept.length && defaultAccept) {
       result = { acceptStr: getAccept(defaultAccept), acceptDes: defaultAccept.join(', ') };
+    } else {
+      result = { acceptStr: getAccept(accept), acceptDes: des };
+      if (!result.acceptStr.includes('image') && /(图片|图像)/.test(des)) {
+        result.acceptStr += ',image/*';
+      }
     }
-    result = { acceptStr: getAccept(accept), acceptDes: des };
-    if (!result.acceptStr.includes('image') && /(图片|图像)/.test(des)) {
-      result.acceptStr += ',image/*';
+    // 图片默认加上heif
+    if (['image', 'png', 'jpg', 'jpeg', 'bmp'].some((item) => result.acceptStr?.startsWith(item))) {
+      result.acceptStr += ',.heif,.heic';
     }
     return result;
   }
-  return {};
+  return defaultRes;
 }
 
 enum defaultParamsType {
@@ -48,12 +54,12 @@ enum defaultParamsType {
 
 // 识别参数
 export const defaultShowUrlParams: Record<string, any> = {
-  manipulation_detection: {
-    // PS检测
-    title: '选择检测文件类型',
-    keys: ['category'],
-    defaultParams: defaultParamsType.double,
-  },
+  // manipulation_detection: {
+  //   // PS检测
+  //   title: '选择检测文件类型',
+  //   keys: ['category'],
+  //   defaultParams: defaultParamsType.double,
+  // },
 };
 
 interface UrlParams {
@@ -67,6 +73,7 @@ interface UrlParams {
 export function formatUrlParams(params: UrlParams[], service: string) {
   if (Array.isArray(params) && defaultShowUrlParams[service]) {
     const options = params
+      .filter((item) => item.enum)
       .map((item) => ({
         ...item,
         key: item.key,
@@ -92,31 +99,24 @@ export function useUploadFormat(props?: { curRobot: any; [key: string]: any }) {
   const { service, api_document } = props?.curRobot || {};
 
   const [documentInfo, setDocumentInfo] = useState<Record<string, any>>();
-  const [acceptStr, setAcceptStr] = useState<string>();
-  const [acceptDes, setAcceptDes] = useState<string>();
   const [urlParams, setUrlParams] = useState<ParamsProp | undefined>();
   const [modalInfo, setModalInfo] = useState<Record<string, any>>({ visible: false });
   const [collapsed, setCollapsed] = useState(false);
+  const [reRecognizeDeps, setReRecognizeDeps] = useState(0);
 
   useEffect(() => {
     if (!service) return;
-    if (api_document?.id) {
-      formatHandle(api_document);
-      return;
-    } else {
-      request.get(`/document/info/${service}`).then((res) => {
-        formatHandle(res.data);
-      });
+    if (props?.curRobot) {
+      if (api_document?.id === service) {
+        formatHandle(api_document);
+        return;
+      }
     }
   }, [service, api_document]);
 
   function formatHandle(data: any) {
     if (!data) return;
-    const description = data.request_body_description;
-    const result = formatSuffix(description, service);
     const params = formatUrlParams(data.url_params, data.id);
-    setAcceptDes(result?.acceptDes);
-    setAcceptStr(result?.acceptStr);
     setUrlParams(params);
     setDocumentInfo(data);
   }
@@ -151,8 +151,6 @@ export function useUploadFormat(props?: { curRobot: any; [key: string]: any }) {
   );
 
   return {
-    acceptDes,
-    acceptStr,
     urlParams,
     getDefaultUrlParams,
     modalInfo,
@@ -160,6 +158,8 @@ export function useUploadFormat(props?: { curRobot: any; [key: string]: any }) {
     documentInfo,
     collapsed,
     setCollapsed,
+    reRecognizeDeps,
+    setReRecognizeDeps,
   };
 }
 

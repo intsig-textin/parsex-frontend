@@ -1,5 +1,5 @@
 @navHeight: 50px;
-@robotHeader: 40px;
+@robotHeader: 36px;
 @noteColor: rgba(58, 65, 92, 0.68);
 
 .container {
@@ -13,6 +13,7 @@
     z-index: 2;
     flex: 0 0 298px;
     width: 298px;
+    min-width: 298px;
     height: 100%;
     background: #fff;
     border-right: 1px solid #dcdfe5;
@@ -21,6 +22,7 @@
     &.barCollapsed {
       flex: 0 0 0;
       width: 0;
+      min-width: 0;
     }
     .leftBarAnimate {
       height: 100%;
@@ -44,22 +46,60 @@
       height: 50px;
       color: #fff;
       font-size: 16px;
-      background-color: #aaa;
       border-radius: 0 8px 8px 0;
-      transform: perspective(30px) rotateY(22deg);
       cursor: pointer;
-      opacity: 0.5;
-      transition: opacity 0.3s;
 
-      &:hover {
-        opacity: 1;
+      &::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: @primary-color;
+        border-radius: 0 8px 8px 0;
+        transform: perspective(30px) rotateY(22deg);
+        transition: opacity 0.3s;
+        content: '';
+      }
+
+      &:hover::after {
+        opacity: 0.8;
+      }
+
+      .collapsedBarText {
+        position: relative;
+        z-index: 10;
+      }
+
+      &.collapsedBar-width-text {
+        top: calc(50% - 45px);
+        height: 90px;
+        padding-left: 3px;
+        line-height: 14px;
+
+        &::after {
+          left: -1px;
+          transform: perspective(80px) rotateY(22deg);
+        }
+
+        .collapsed-text {
+          font-size: 12px;
+        }
+
+        :global {
+          .anticon {
+            margin-top: 4px;
+            margin-left: -1px;
+            font-size: 14px;
+          }
+        }
       }
     }
   }
 
   .mainContent {
     flex: 1;
-    min-width: 450px;
+    // min-width: 330px;
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
@@ -72,7 +112,7 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    min-width: 450px;
+    // min-width: 450px;
     height: 100%;
     overflow-y: hidden;
     background: #fff;
@@ -81,7 +121,7 @@
 
     :global {
       .result-content-body {
-        [data-page-number]:not(:only-child) {
+        [data-page-number]:not(:only-child):not(.hidden-page) {
           &:not(:empty):after {
             display: block;
             margin: 8px 0 20px;
@@ -89,17 +129,115 @@
             font-size: 12px;
             text-align: center;
             border-bottom: 1px solid #eee;
-            content: '[第' attr(data-page-number) '页]';
+            content: '[\7b2c'attr(data-page-number) '\9875]';
             user-select: none;
           }
         }
       }
     }
   }
+
+  .resizeHandle {
+    position: relative;
+    z-index: 100;
+    width: 2px;
+    margin-right: -2px;
+  }
+  .resizeHandle::before {
+    position: absolute;
+    top: 0;
+    right: -10px; /* 向右扩展10px */
+    bottom: 0;
+    left: -4px; /* 向左扩展10px */
+    z-index: -1; /* 确保伪元素在按钮内容之下 */
+    background: transparent; /* 确保伪元素本身不可见 */
+    content: '';
+  }
+  .resizeHandle:hover,
+  .resizeHandleActive {
+    background: #1a66ff;
+  }
 }
 @media screen and (max-width: 1280px) {
   .rightBar {
-    width: 358px !important;
+    // width: 358px !important;
     min-width: 358px !important;
+  }
+}
+
+:global {
+  .Pane2 {
+    overflow: hidden;
+    // .ant-tabs-content-holder{
+    //   overflow-x: auto;
+    // }
+    // .ant-tabs-content.ant-tabs-content-top{
+    //   min-width: 950px;
+
+    // }
+  }
+  // .Resizer {
+  //   position: relative;
+  //   z-index: 1;
+  //   width: 10px;
+  //   margin: 0 -5px;
+  //   border-right: 5px solid rgba(255, 255, 255, 0);
+  //   border-left: 5px solid #f2f5fa;
+  //   //   opacity: 0;
+  //   cursor: ew-resize;
+  // }
+  .ant-message-custom-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .Resizer {
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    background: transparent;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
+    opacity: 0.2;
+  }
+
+  .Resizer:hover {
+    -webkit-transition: all 2s ease;
+    transition: all 2s ease;
+  }
+
+  // .Resizer.horizontal {
+  //   height: 11px;
+  //   margin: -5px 0;
+  //   border-top: 5px solid rgba(255, 255, 255, 0);
+  //   border-bottom: 5px solid rgba(255, 255, 255, 0);
+  //   cursor: row-resize;
+  //   width: 100%;
+  // }
+
+  // .Resizer.horizontal:hover {
+  //   border-top: 5px solid rgba(0, 0, 0, 0.5);
+  //   border-bottom: 5px solid rgba(0, 0, 0, 0.5);
+  // }
+
+  .Resizer.vertical {
+    width: 11px;
+    margin: 0 -5px;
+    border-right: 5px solid rgba(255, 255, 255, 0);
+    border-left: 5px solid rgba(255, 255, 255, 0);
+    cursor: col-resize;
+  }
+
+  .Resizer.vertical:hover {
+    border-right: 5px solid rgba(0, 0, 0, 0.5);
+    border-left: 5px solid rgba(0, 0, 0, 0.5);
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
   }
 }

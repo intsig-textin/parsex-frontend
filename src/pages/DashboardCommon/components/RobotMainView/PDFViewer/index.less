@@ -1,3 +1,17 @@
+@fill-alpha: 0.05;
+@fill-active-alpha: 0.2;
+@stroke-alpha: 0.5;
+
+@paragraph-color: @primary-color;
+@stamp-color: #e5451e;
+@list-color: #5d2281;
+@image-color: #ed7b2b;
+@formula-color: #06bebb;
+@watermark-color: #6abe28;
+@table-color: #11a35f;
+// 页眉页脚
+@edge-color: #af3188;
+@header-footer-color: @text-gray-color;
 .pdf-viewer {
   position: absolute;
   top: 0;
@@ -13,6 +27,7 @@
     width: 8px;
     height: 8px;
   }
+
   &::-webkit-scrollbar-thumb {
     background-color: #a2a8b2;
     border-radius: 8px;
@@ -29,10 +44,12 @@
   }
 
   :global {
+    .pdfViewer.removePageBorders .page {
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
     .page {
-      border-image: none !important;
-      --page-border: 0px solid transparent;
-
       .rectLayer {
         position: absolute;
         top: 0;
@@ -60,6 +77,12 @@
             stroke: #ed7b2b;
           }
 
+          &.stamp {
+            box-shadow: 2px 2px 4px 0px #fcdfca, -2px -2px 4px 0px #ffffff;
+            fill: rgba(#e5451e, 0.05);
+            stroke: #e5451e;
+          }
+
           &.catalog {
             // box-shadow: 2px 2px 4px 0px #e6fffb, -2px -2px 4px 0px #ffffff;
             opacity: 0;
@@ -75,15 +98,19 @@
                 0% {
                   transform: scale(1.08);
                 }
+
                 25% {
                   transform: scale(0.95);
                 }
+
                 50% {
                   transform: scale(1.08);
                 }
+
                 75% {
                   transform: scale(0.95);
                 }
+
                 100% {
                   transform: scale(1);
                 }
@@ -94,6 +121,81 @@
           &.active {
             opacity: 1;
             stroke-width: 2px;
+          }
+
+          &.stamp {
+            fill: rgba(@stamp-color, @fill-alpha);
+            stroke: rgba(@stamp-color, @stroke-alpha);
+
+            &.active {
+              fill: rgba(@stamp-color, @fill-active-alpha);
+              stroke: @stamp-color;
+            }
+          }
+
+          &.other {
+            fill: rgba(@header-footer-color, @fill-alpha);
+            stroke: @header-footer-color;
+
+            &.active {
+              fill: rgba(@header-footer-color, @fill-active-alpha);
+              stroke: @header-footer-color;
+            }
+          }
+        }
+
+        .cell-g-wrapper {
+          &.cell-g-hidden {
+            polygon.table {
+              fill: rgba(@table-color, @fill-alpha);
+              &.active {
+                fill: rgba(@table-color, @fill-active-alpha);
+              }
+            }
+            path {
+              opacity: 0;
+            }
+            .cell-toggle-show {
+              display: none;
+            }
+            .cell-toggle-hidden {
+              display: block;
+            }
+          }
+
+          &.cell-g-wrapper-hover {
+            .cell-toggle-hidden,
+            .cell-toggle-show {
+              opacity: 1;
+            }
+          }
+
+          path {
+            fill: rgba(@paragraph-color, @fill-alpha);
+            stroke: rgba(@paragraph-color, @stroke-alpha);
+            stroke-width: 1px;
+
+            &.table {
+              fill: rgba(@table-color, @fill-alpha);
+              stroke: rgba(@table-color, @stroke-alpha);
+
+              &.active {
+                fill: rgba(@table-color, @fill-active-alpha);
+              }
+            }
+          }
+
+          polygon.table {
+            fill: transparent;
+          }
+
+          .cell-toggle-hidden {
+            display: none;
+            opacity: 0;
+          }
+          .cell-toggle-show {
+            display: block;
+            opacity: 0;
           }
         }
       }

@@ -2,6 +2,7 @@
   position: relative;
   padding: 0 30px 0;
   color: @text-color;
+  white-space: pre-wrap;
 
   [data-content-id] {
     margin-bottom: 12px;
@@ -19,6 +20,10 @@
   ul {
     margin-left: 40px;
     padding-left: 0;
+  }
+
+  img {
+    border: 1px solid transparent;
   }
 
   table {
@@ -53,6 +58,48 @@
   :global {
     .active {
       color: @primary-color;
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        position: relative;
+        &::before {
+          position: absolute;
+          top: 50%;
+          left: -26px;
+          color: #769df0;
+          font-size: 14px;
+          line-height: 1;
+          transform: translateY(-50%);
+        }
+      }
+      h1::before {
+        content: 'H1';
+      }
+      h2::before {
+        content: 'H2';
+      }
+      h3::before {
+        content: 'H3';
+      }
+      h4::before {
+        font-size: 12px;
+        content: 'H4';
+      }
+      h5::before {
+        font-size: 12px;
+        content: 'H5';
+      }
+      h6::before {
+        font-size: 12px;
+        content: 'H6';
+      }
+
+      .no-content {
+        color: @primary-color !important;
+      }
 
       img,
       table {
@@ -60,7 +107,20 @@
       }
 
       table {
-        border-color: #11a35f;
+        &,
+        th,
+        td {
+          color: @text-color;
+          border-color: @primary-color;
+        }
+
+        tr .active {
+          background-color: rgba(17, 163, 95, 0.2);
+        }
+      }
+
+      .split-table-line {
+        border-color: @primary-color;
       }
 
       img {
@@ -87,6 +147,32 @@
       }
     }
 
+    .chart-table {
+      margin-top: 12px;
+    }
+
+    .table-wrapper {
+      position: relative;
+    }
+
+    .split-table-line {
+      position: absolute;
+      right: 0;
+      left: -20px;
+      height: 1px;
+      background-color: #fff;
+      border-bottom: 1px dashed #999;
+
+      .split-table-line-number {
+        position: absolute;
+        top: -16px;
+        left: 8px;
+        color: @text-gray-color;
+        font-size: 12px;
+        line-height: 16px;
+      }
+    }
+
     .formula-item {
       &:not(:last-child) {
         margin-bottom: 12px;
@@ -101,6 +187,14 @@
       max-width: 100%;
       max-height: 100vh;
     }
+
+    .no-content {
+      font-size: 12px;
+
+      &:not(.active) {
+        color: @text-gray-color;
+      }
+    }
   }
 }
 
@@ -109,9 +203,6 @@
   border: none !important;
   visibility: hidden;
   :global {
-    .vditor {
-      display: flex;
-    }
     .vditor-toolbar {
       display: none;
     }
@@ -156,4 +247,8 @@
 .editMode {
   display: flex !important;
   visibility: visible;
+
+  .editor {
+    display: flex;
+  }
 }
