@@ -28,7 +28,7 @@ export const getParamsSettingBannerTips = (service: string) => {
 
 // 通用文档解析
 const mdDefaultParams: Record<string, any> = {
-  custom_api: 'https://api.textin.com/ai/service/v1/pdf_to_markdown',
+  custom_api: window._env_host?.API_URL || 'https://api.textin.com/ai/service/v1/pdf_to_markdown',
   dpi: 144,
   page_count: 1000,
   apply_document_tree: 1,
@@ -156,7 +156,9 @@ export const rewriteParams = (url_params: any[], { robotInfo }: { robotInfo: any
     }
     params = params.sort((a, b) => a.sortKey - b.sortKey);
 
-    params.unshift(...AppIdAndSecretOptions);
+    params.unshift(
+      ...(window._env_host?.PRIVATE ? AppIdAndSecretOptions.slice(0, 1) : AppIdAndSecretOptions),
+    );
   }
   return params;
 };

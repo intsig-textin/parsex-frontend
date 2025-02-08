@@ -75,7 +75,7 @@
 
 确保你的开发环境满足以下要求：
 
-- Node.js 版本 >= 14.x
+- Node.js 版本 >= 18.x
 - Yarn 或 npm 最新版本
 - TypeScript 版本 >= 4.x
 

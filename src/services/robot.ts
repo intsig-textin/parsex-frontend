@@ -12,8 +12,8 @@ import {
   uppercaseFileType,
   getOCRPrefix,
   requestWidthCache,
+  getTextinPrefix,
 } from '@/utils';
-import { getDvaApp } from 'umi';
 
 export interface IRobotTypeParams {
   type?: number;
@@ -101,7 +101,8 @@ export interface IRobotApiInfoResponse extends IResponse {
 }
 
 export async function getRobotApiInfo(params: IRobotDetailReq) {
-  return request<IRobotApiInfoResponse>(`/document/info/${params.service}`, {
+  const url = window._env_host?.DOC_URL || `${getTextinPrefix()}/document/info/${params.service}`;
+  return request<IRobotApiInfoResponse>(url, {
     method: 'GET',
   });
 }

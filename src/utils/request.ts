@@ -89,7 +89,6 @@ export const request = extend({
     'Cache-Control': 'no-cache',
     pragma: 'no-cache',
   },
-  prefix: getTextinPrefix(),
 });
 export default request;
 

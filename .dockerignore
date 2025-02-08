@@ -1,0 +1,36 @@
+
+# dependencies
+node_modules
+
+# production
+dist
+
+# umi
+.umi
+.umi-production
+
+
+# misc
+.DS_Store
+npm-debug.log*
+yarn-error.log
+
+# config
+/coverage
+.idea
+package-lock.json
+jest.config.ts
+*bak
+.vscode
+
+# lint
+.git/
+.gitingore
+.eslintignore
+.eslintrc.js
+.prettierignore
+.prettierrc.js
+.stylelintrc.js
+
+# other
+README.md

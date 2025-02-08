@@ -43,7 +43,10 @@ export default defineConfig({
     loading: '@/pages/Loading',
   },
   dynamicImportSyntax: {},
-  headScripts: [{ src: `${prefixPath}classList.polyfill.min.js`, defer: true }],
+  headScripts: [
+    { src: `${prefixPath}env.js?t=${Date.now()}` },
+    { src: `${prefixPath}classList.polyfill.min.js`, defer: true },
+  ],
   externals: {},
   scripts: [],
   copy: ['./vendor/classList.polyfill.min.js'],

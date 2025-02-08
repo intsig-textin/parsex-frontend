@@ -112,7 +112,7 @@ const useFormatList = (initialState: IProps = {}) => {
     const pageNumber = 20; // 提示的页数
     const curSettings = getParamsSettings();
     // 设置的页数小于需要提示的页数
-    if (curSettings?.page_count <= pageNumber) {
+    if (curSettings?.page_count <= pageNumber || window._env_host?.PRIVATE) {
       nextHandle();
       return;
     }
