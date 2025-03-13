@@ -267,7 +267,7 @@ export function initObserve({
           translateY: 0,
         };
       }
-      svgDom.setAttribute('data-dpiScale', `${dpiScale}`);
+      svgDom.setAttribute('data-dpi-scale', `${dpiScale}`);
       svgDom.setAttribute('data-angle', `${pageAngle}`);
       svgDom.setAttribute('class', `${rectClass}`);
       svgDom.setAttribute('width', `${info.width}`);
